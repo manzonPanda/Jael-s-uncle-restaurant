@@ -14,6 +14,7 @@ return [
     */
 
     'defaults' => [
+        // 'guard' => 'api',
         'guard' => 'web',
         'passwords' => 'users',
     ],
@@ -36,15 +37,19 @@ return [
     */
 
     'guards' => [
-        'web' => [
+        'web' => [ //web guard that can untie to Models
             'driver' => 'session',
             'provider' => 'users',
         ],
 
-        'api' => [
+        'api' => [  //API guard
             'driver' => 'token',
             'provider' => 'users',
             'hash' => false,
+        ],
+        'adminGuard' => [
+            'driver' => 'session',
+            'provider' => 'admins',
         ],
     ],
 
@@ -69,6 +74,11 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\User::class,
+        ],
+
+        'admins' => [
+            'driver' => 'eloquent',
+            'model' => App\Admin::class,
         ],
 
         // 'users' => [
@@ -98,6 +108,11 @@ return [
             'table' => 'password_resets',
             'expire' => 60,
         ],
+        'admins' => [
+            'provider' => 'admins',
+            'table' => 'password_resets',
+            'expire' => 60,
+        ], 
     ],
 
 ];

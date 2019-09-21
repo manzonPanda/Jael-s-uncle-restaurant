@@ -17,8 +17,31 @@ class RedirectIfAuthenticated
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        if (Auth::guard($guard)->check()) {
-            return redirect('/home');
+        //default
+        // if (Auth::guard($guard)->check()) {
+        //     return redirect('/home');
+        // }
+        // return $next($request);
+
+        switch ($guard) {
+            case 'adminGuard': //for admin
+                if(Auth::guard($guard)->check()){
+                    return redirect()->route('admin.dashboard');
+                }
+                break;
+            
+            default: //for sales assistant
+                if (Auth::guard($guard)->check()) {
+                    // return redirect('/home');
+                    $physicalCount = Physical_count::all();
+                    if($physicalCount[0]["status"] === "inactive"){
+                        return redirect('/salesAssistant/sales');
+                    }else{
+                        return redirect('/salesAssistant/physicalCount');
+                    }
+                }
+             
+                break;
         }
 
         return $next($request);
