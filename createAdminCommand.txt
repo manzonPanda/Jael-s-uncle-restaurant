@@ -1,0 +1,8 @@
+create new admin using Tinker:
+php artisan tinker
+$admin = new App\Admin
+$admin->name = "newName"
+$admin->email = "newEmail"
+*Don't use  $admin->password = Hash::make("newNam")
+$admin->password = "newPassword"
+$admin->save()
