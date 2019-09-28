@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
 <head>
-    {{-- <meta charset="utf-8">
+    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ config('app.name', 'Laravel') }}</title> --}}
+    <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Styles -->
-{{-- <!--===============================================================================================-->	
+<!--===============================================================================================-->	
 <link rel="icon" type="image/png" href="{{ asset('assets/img/logo3.png') }}"/>
 <!--===============================================================================================-->
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/login_v2/vendor/bootstrap/css/bootstrap.min.css')}}">
@@ -31,13 +31,14 @@
 <!--===============================================================================================-->
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/login_v2/css/util.css')}}">
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/login_v2/css/main.css')}}">
-<!--===============================================================================================--> --}}
+<!--===============================================================================================-->
 
 </head>
 <body>
 
 	<div class="limiter">
-		<div class="container-login100" style="background-image: url('{{ asset('assets/login_v2/images/Logo3.png')}}');">
+		<div class="container-login100" style="background-image: url('{{ asset('assets/images/home.jpg')}}');">
+        {{-- <div class="container-login100" style="background-color:indigo"> --}}
 		
 			<div class="wrap-login100">
                 <form class="login100-form validate-form" method="POST" action="{{ route('admin.login.submit') }}">

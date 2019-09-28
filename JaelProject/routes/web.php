@@ -16,6 +16,7 @@ Route::get('/', function () {
 });
 
 Auth::routes();
+//where is ->name('login') routes ?
 
 Route::get('/home', 'HomeController@index')->name('home');
 

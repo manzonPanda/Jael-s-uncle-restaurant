@@ -25,13 +25,13 @@ class RedirectIfAuthenticated
 
         switch ($guard) {
             case 'adminGuard': //for admin
-                if(Auth::guard($guard)->check()){
+                if(Auth::guard($guard)->check()){ //if ?guard? is logged in
                     return redirect()->route('admin.dashboard');
                 }
                 break;
             
             default: //for sales assistant
-                if (Auth::guard($guard)->check()) {
+                if (Auth::guard($guard)->check()) { //if ?guard? is logged in
                     // return redirect('/home');
                     $physicalCount = Physical_count::all();
                     if($physicalCount[0]["status"] === "inactive"){

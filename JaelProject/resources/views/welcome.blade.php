@@ -9,15 +9,42 @@
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
 
+
         <!-- Styles -->
+
+        {{-- <link rel="stylesheet" type="text/css" href="{{ asset('assets/login_v2/css/main.css')}}"> --}}
+        
         <style>
+            .wrap-login100 {
+                width: 900px;
+                height: 100px;
+                border-radius: 10px;
+                overflow: hidden;
+                padding: 55px 55px 37px 55px;
+                
+                background-color: rgba(10,10,10,.68);
+                //background: #9152f8;/
+                background: -webkit-linear-gradient(top, #7579ff, #b224ef);
+                background: -o-linear-gradient(top, #7579ff, #b224ef);
+                background: -moz-linear-gradient(top, #7579ff, #b224ef);
+                background: linear-gradient(top, #7579ff, #b224ef);
+            }
+            /* @media (max-width: 576px) {
+                .wrap-login100 {
+                    padding: 55px 15px 31px 15px;
+                }
+            } */
+
             html, body {
-                background-color: #fff;
-                color: #636b6f;
+                background-image: url('{{ asset('assets/images/home2.jpg')}}');
+                /* background-color:darkslateblue; */
+                color: white;
                 font-family: 'Nunito', sans-serif;
                 font-weight: 200;
                 height: 100vh;
                 margin: 0;
+                /* background-repeat:no-repeat; */
+                background-size:cover;
             }
 
             .full-height {
@@ -49,9 +76,9 @@
             }
 
             .links > a {
-                color: #636b6f;
+                color: white;
                 padding: 0 25px;
-                font-size: 13px;
+                font-size: 16px;
                 font-weight: 600;
                 letter-spacing: .1rem;
                 text-decoration: none;
@@ -63,7 +90,7 @@
             }
         </style>
     </head>
-    <body>
+    <body >
         <div class="flex-center position-ref full-height">
             @if (Route::has('login'))
                 <div class="top-right links">
@@ -79,12 +106,13 @@
                 </div>
             @endif
 
-            <div class="content">
+            {{-- <div class="content"> --}}
+            <div class="wrap-login100">
                 <div class="title m-b-md">
-                    Jael's Project
+                    Jael's Awesome Project
                 </div>
 
-                <div class="links">
+                {{-- <div class="links">
                     <a href="https://laravel.com/docs">Docs</a>
                     <a href="https://laracasts.com">Laracasts</a>
                     <a href="https://laravel-news.com">News</a>
@@ -93,7 +121,7 @@
                     <a href="https://forge.laravel.com">Forge</a>
                     <a href="https://vapor.laravel.com">Vapor</a>
                     <a href="https://github.com/laravel/laravel">GitHub</a>
-                </div>
+                </div> --}}
             </div>
         </div>
     </body>

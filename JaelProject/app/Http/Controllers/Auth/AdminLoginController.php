@@ -23,7 +23,7 @@ class AdminLoginController extends Controller
             -guest middleware:only wants people that are not login!, so if you're logged in, you don't
             have the right to see this page! and it will redirect you to the home page for that authentication
             -if the page is protected by a guest, and you're logged in from the guard that is protecting
-             agaisnt, then it will send you to the correct page for that guard.
+             agaisnt, then it will send you to the correct page for that guard..not just always /home.
     */
     }
 
