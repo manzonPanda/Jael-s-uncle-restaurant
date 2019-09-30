@@ -26,6 +26,35 @@ class AdminController extends Controller
      */
     public function index()
     {
-        return view('admin');
+        return view('adminViews.admin-dashboard');
+    }
+
+    public function userProfile()
+    {
+        return view('adminViews.admin-userProfile');
+    }
+
+    public function categories()
+    {
+        return view('adminViews.admin-categories');
+    }
+
+    public function menus()
+    {
+        return view('adminViews.admin-menus');
+    }
+
+    public function reports()
+    {
+        return view('adminViews.admin-reports');
+    }
+
+    public function settings()
+    {
+        return view('adminViews.admin-settings');
+    }
+    public function aboutUs()
+    {
+        return view('adminViews.admin-aboutUs');
     }
 }
