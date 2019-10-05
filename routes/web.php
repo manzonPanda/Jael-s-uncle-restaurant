@@ -24,8 +24,12 @@ Route::get('admin/login','Auth\AdminLoginController@showLoginForm')->name('admin
 Route::post('admin/login','Auth\AdminLoginController@login')->name('admin.login.submit');
 Route::get('/admin', 'AdminController@index')->name('admin.dashboard');
 Route::get('/admin/userProfile', 'AdminController@userProfile')->name('admin.userProfile');
+
 Route::get('/admin/categories', 'AdminController@categories')->name('admin.categories');
+Route::get('/admin/categories/getCategories', 'AdminController@getCategories')->name('categories.getCategories');
+
 Route::get('/admin/menus', 'AdminController@menus')->name('admin.menus');
+Route::get('/admin/orders', 'AdminController@orders')->name('admin.orders');
 Route::get('/admin/reports', 'AdminController@reports')->name('admin.reports');
 Route::get('/admin/aboutUs', 'AdminController@aboutUs')->name('admin.aboutUs');
 Route::get('/admin/settings', 'AdminController@settings')->name('admin.settings');

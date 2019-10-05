@@ -3,6 +3,11 @@
 class="active"
 @endsection
 
+@section('endBodyScript')
+    <!--   Core JS Files   -->
+    <script src="{{ asset('assets/finalTemplate/js/core/jquery.3.2.1.min.js')}}"></script>
+@endsection
+
 @section('content')
 {{-- <div class="container">
     <div class="row justify-content-center">

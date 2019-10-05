@@ -6,28 +6,29 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
+    
+    {{-- Light-bootstrap-dashboard-master --}}
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    
     <title>{{ config('app.name', 'Laravel') }}</title>
-
 
     <!-- Styles -->
     {{-- <link href="{{ asset('css/app.css') }}" rel="stylesheet">    --}}
     
-    {{-- Light-bootstrap-dashboard-master --}}
-    <link rel="apple-touch-icon" sizes="76x76" href="{{asset('assets/finalTemplate/img/apple-icon.png') }}">
-    <link rel="icon" type="image/png" href="{{asset('assets/finalTemplate/img/favicon.ico')}}">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
+     <!-- Bootstrap core CSS     -->
+    <link href="{{ asset('assets/finalTemplate/css/bootstrap.min.css')}}" rel="stylesheet" />
+    <link href="{{ asset('assets/finalTemplate/css/light-bootstrap-dashboard.css')}}" rel="stylesheet" />
+    
     <!--     Fonts and icons     -->
     <link href="{{ asset('assets/finalTemplate/fonts-googleapis.css')}}" rel="stylesheet" />
     {{-- <link rel="stylesheet" href="{{ asset('assets/finalTemplate/font-awesome.min.css')}}" /> --}}
     <link rel="stylesheet" href="{{ asset('assets/fontawesome-free-5.11.2-web/css/all.css')}}">
-    <!-- CSS Files -->
-    <link href="{{ asset('assets/finalTemplate/css/bootstrap.min.css')}}" rel="stylesheet" />
-    <link href="{{ asset('assets/finalTemplate/css/light-bootstrap-dashboard.css')}}" rel="stylesheet" />
-    <!-- CSS Just for demo purpose, don't include it in your project -->
-    {{-- <link href="../assets/css/demo.css" rel="stylesheet" /> --}}
 
+
+
+
+    @yield('headScript')
 </head>
 <body>
     <div id="app">
@@ -66,6 +67,12 @@
                             <a class="nav-link" href="{{route('admin.menus')}}">
                                 <i class="nc-icon nc-paper-2"></i>
                                 <p>Menus</p>
+                            </a>
+                        </li>
+                        <li @yield('orders_link')>
+                            <a class="nav-link" href="{{route('admin.orders')}}">
+                                <i class="nc-icon nc-paper-2"></i>
+                                <p>Orders</p>
                             </a>
                         </li>
                         <li @yield('reports_link')>
@@ -441,11 +448,12 @@
     </div>
 
 
+    @yield('modals')
+
     <!-- Scripts -->    
     {{-- <script src="{{ asset('js/app.js') }}" defer></script> --}}
 
-    <!--   Core JS Files   -->
-    <script src="{{ asset('assets/finalTemplate/js/core/jquery.3.2.1.min.js')}}"></script>
+    @yield('endBodyScript')
     <script src="{{ asset('assets/finalTemplate/js/core/popper.min.js')}}" type="text/javascript"></script>
     <script src="{{ asset('assets/finalTemplate/js/core/bootstrap.min.js')}}" ></script>
     <!-- Control Center for Light Bootstrap Dashboard: scripts for the example pages etc -->

@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('settings_link')
+@section('orders_link')
 class="active"
 @endsection
 
@@ -7,6 +7,7 @@ class="active"
     <!--   Core JS Files   -->
     <script src="{{ asset('assets/finalTemplate/js/core/jquery.3.2.1.min.js')}}"></script>
 @endsection
+
 
 @section('content')
 <div class="content">
@@ -23,7 +24,7 @@ class="active"
                             </div>
                         @endif
 
-                        You are in a Admin Settings Page!
+                        You are in Orders Page!
                     </div>
                 </div>
             </div>
