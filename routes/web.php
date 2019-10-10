@@ -29,7 +29,11 @@ Route::get('/admin/categories', 'AdminController@categories')->name('admin.categ
 Route::get('/admin/categories/getCategories', 'AdminController@getCategories')->name('categories.getCategories');
 
 Route::get('/admin/menus', 'AdminController@menus')->name('admin.menus');
+Route::get('/admin/menus/getMenus', 'AdminController@getMenus')->name('menus.getMenus');
+
 Route::get('/admin/orders', 'AdminController@orders')->name('admin.orders');
+Route::get('/admin/orders/getManageOrders', 'AdminController@getManageOrders')->name('orders.getManageOrders');
+
 Route::get('/admin/reports', 'AdminController@reports')->name('admin.reports');
 Route::get('/admin/aboutUs', 'AdminController@aboutUs')->name('admin.aboutUs');
 Route::get('/admin/settings', 'AdminController@settings')->name('admin.settings');

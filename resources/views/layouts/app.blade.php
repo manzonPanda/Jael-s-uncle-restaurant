@@ -17,8 +17,8 @@
     {{-- <link href="{{ asset('css/app.css') }}" rel="stylesheet">    --}}
     
      <!-- Bootstrap core CSS     -->
-    <link href="{{ asset('assets/finalTemplate/css/bootstrap.min.css')}}" rel="stylesheet" />
-    <link href="{{ asset('assets/finalTemplate/css/light-bootstrap-dashboard.css')}}" rel="stylesheet" />
+     <link href="{{ asset('assets/finalTemplate/css/bootstrap.min.css')}}" rel="stylesheet" />
+     <link href="{{ asset('assets/finalTemplate/css/light-bootstrap-dashboard.css')}}" rel="stylesheet" />
     
     <!--     Fonts and icons     -->
     <link href="{{ asset('assets/finalTemplate/fonts-googleapis.css')}}" rel="stylesheet" />
@@ -33,7 +33,7 @@
 <body>
     <div id="app">
         <div class="wrapper">
-            <div class="sidebar" data-image="{{ asset('assets/finalTemplate/img/sidebar-5.jpg')}}">
+            <div class="sidebar" data-color="green" data-image="{{ asset('assets/finalTemplate/img/sidebar-5.jpg')}}">
                 <!--
                     Tip 1: You can change the color of the sidebar using: data-color="purple | blue | green | orange | red"
                     Tip 2: you can also add an image using data-image tag
@@ -411,34 +411,12 @@
                     <footer class="footer">
                         <div class="container-fluid">
                             <nav>
-                                <ul class="footer-menu">
-                                    <li>
-                                        <a href="#">
-                                            Home
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            Company
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            Portfolio
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            Blog
-                                        </a>
-                                    </li>
-                                </ul>
                                 <p class="copyright text-center">
                                     ©
                                     <script>
                                         document.write(new Date().getFullYear())
                                     </script>
-                                    <a href="http://www.creative-tim.com">Creative Tim</a>, made with love for a better web
+                                    <a href="#">Jake James Manzon</a>, made with love and passion:)
                                 </p>
                             </nav>
                         </div>

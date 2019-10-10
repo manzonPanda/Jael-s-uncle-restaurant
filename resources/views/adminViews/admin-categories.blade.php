@@ -60,7 +60,6 @@ class="active"
                             </div>
                         @endif
 
-                        You are in a Categories Page!
                     </div>
                 </div>
             </div>
@@ -73,19 +72,22 @@ class="active"
                 </p>
             </div>
         </div>
-
-        <div class="content table-responsive table-full-width">
-            <table class="table table-bordered table-striped" id="categoriesDataTable">
-                <thead>
-                    <tr>
-                        <th class="text-left">Category Name</th>
-                        <th class="text-left">Status</th>
-                        <th class="text-left">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
+        <div class="row ">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+                <div class="content table-responsive table-full-width">
+                    <table class="table table-bordered table-striped" id="categoriesDataTable">
+                        <thead>
+                            <tr>
+                                <th class="text-left">Category Name</th>
+                                <th class="text-left">Status</th>
+                                <th class="text-left">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -97,7 +99,7 @@ class="active"
     <div class = "modal-dialog modal-md">
         <div class = "modal-content">
             
-            {!! Form::open(['method'=>'get','id'=>'formPurchaseOrder']) !!}
+            {!! Form::open(['method'=>'get','id'=>'formAddCategory']) !!}
             <input type="hidden" id="_token" value="{{ csrf_token() }}">
 
             <div class="modal-header">

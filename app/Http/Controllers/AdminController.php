@@ -48,8 +48,8 @@ class AdminController extends Controller
         return Datatables::of($data)
             ->addColumn('action',function($data){
                 return "
-                <a href = '#purchasesModal' data-toggle='modal' >
-                    <button onclick='getItems(this)'class='btn btn-info' ><i class='glyphicon glyphicon-th-list'></i> View</button>
+                <a href = '#editCategoryModal' data-toggle='modal' >
+                    <button onclick='editCategory(this)'class='btn btn-info' ><i class='glyphicon glyphicon-th-list'></i> View</button>
                 </a>
                 ";
             })
@@ -60,9 +60,37 @@ class AdminController extends Controller
     {
         return view('adminViews.admin-menus');
     }
+    public function getMenus()
+    {
+        $data = DB::table('products')
+        ->select('image','name','price','category','status');
+        return Datatables::of($data)
+            ->addColumn('action',function($data){
+                return "
+                <a href = '#editMenuModal' data-toggle='modal' >
+                    <button onclick='editMenu(this)'class='btn btn-info' ><i class='glyphicon glyphicon-th-list'></i> View</button>
+                </a>
+                ";
+            })
+         ->make(true);
+    }
     public function orders()
     {
         return view('adminViews.admin-orders');
+    }
+    public function getManageOrders()
+    {
+        $data = DB::table('orders')
+        ->select('receiptNumber','product_id','created_at','status');
+        return Datatables::of($data)
+            ->addColumn('action',function($data){
+                return "
+                <a href = '#editOrderModal' data-toggle='modal' >
+                    <button onclick='editOrder(this)'class='btn btn-info' ><i class='glyphicon glyphicon-th-list'></i> View</button>
+                </a>
+                ";
+            })
+         ->make(true);
     }
 
     public function reports()
