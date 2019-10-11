@@ -30,9 +30,13 @@ Route::get('/admin/categories/getCategories', 'AdminController@getCategories')->
 
 Route::get('/admin/menus', 'AdminController@menus')->name('admin.menus');
 Route::get('/admin/menus/getMenus', 'AdminController@getMenus')->name('menus.getMenus');
+Route::Post('admin/menus/createProduct', 'AdminController@createProduct')->name('admin.createProduct');
 
 Route::get('/admin/orders', 'AdminController@orders')->name('admin.orders');
 Route::get('/admin/orders/getManageOrders', 'AdminController@getManageOrders')->name('orders.getManageOrders');
+Route::Get('/admin/orders/getMenusToCarousel/{category}', 'AdminController@getMenusToCarousel');
+// Route::get('admin/orders/getMenusToCarousel', 'AdminController@getMenusToCarousel')->name('orders.getMenusToCarousel');
+
 
 Route::get('/admin/reports', 'AdminController@reports')->name('admin.reports');
 Route::get('/admin/aboutUs', 'AdminController@aboutUs')->name('admin.aboutUs');

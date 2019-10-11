@@ -21,7 +21,7 @@ class="active"
                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
              }
             });
-       //   $.fn.dataTable.ext.errMode = 'throw';
+            //$.fn.dataTable.ext.errMode = 'throw';
            $('#manageOrdersDataTable').DataTable({
              "destroy": true,
              "processing": true, 
@@ -41,9 +41,129 @@ class="active"
            });
 
         });
+        //Helper
+        function setMultipleAttributes(el, attrs) {
+            for(var key in attrs) {
+                el.setAttribute(key, attrs[key]);
+            }
+        }
+        function displayMenusInCarousel(button){
+            console.log(button.innerHTML);
+            var fullRoute = "/admin/orders/getMenusToCarousel/"+button.innerHTML;
 
-        function displayMenusInCarousel(e){
-            console.log(e.innerHTML);
+            $.ajax({
+                type:'GET',
+                url:fullRoute,
+                // data: {
+                //     'category':button.innerHTML
+                // },
+                success:function(data){
+                    console.log(data)
+                    var currentDiv = 1;
+                    var numberOfMenuPerCarousel = 4;
+                    //initialize first li and first DV1
+                    var newIndicatorElement = document.createElement("li");
+                        setMultipleAttributes(newIndicatorElement, {"data-target": "#carouselExampleIndicators", "data-slide-to": "0"});
+                        document.getElementById("carouselExampleIndicators").children[0].appendChild(newIndicatorElement);
+                    var newDiv = document.createElement("div");
+                        setMultipleAttributes(newDiv,{"class":"carousel-item active","id":"carouselDiv"+currentDiv})
+                        var newRow = document.createElement("div");
+                        newRow.setAttribute("class","row");
+                        newDiv.appendChild( newRow );
+                        document.getElementById("carouselExampleIndicators").children[1].appendChild(newDiv);
+
+                    for (var i = 0; i < data.length; i++) {
+                        if( numberOfMenuPerCarousel / i > 1){
+                            //insert index to the current DIV
+                            var newColSm3Div = document.createElement("div");
+                                newColSm3Div.setAttribute("class","cols-sm-3");
+                            var newCardBgDark = document.createElement("div");
+                                newCardBgDark.setAttribute("class","card bg-dark");
+                            var newImage = document.createElement("img");
+                                setMultipleAttributes(newImage,{"class":"card-img-top","src":data[0].image});
+                            var newCardBody = document.createElement("div");
+                                newCardBody.setAttribute("class","card-body");
+                            var newH5 = document.createElement("h5");
+                                setMultipleAttributes(newH5,{"class":"card-title text-white"})
+                                var productName = document.createTextNode(data[0].productName);
+                                newH5.appendChild(productName);
+                            var newPriceTag = document.createElement("p");
+                                setMultipleAttributes(newPriceTag,{"class":"card-text text-white"});
+                                var price = document.createTextNode(data[0].price);
+                                newPriceTag.appendChild(price);
+                            var newButton = document.createElement("a");
+                                setMultipleAttributes(newButton,{"href":"#","class":"btn bt-primary"});
+                                var textNode = document.createTextNode("Add Order");
+                                newButton.appendChild(textNode);
+                            newCardBody.appendChild(newH5);
+                            newCardBody.appendChild(newPriceTag);
+                            newCardBody.appendChild(newButton);
+                            newCardBgDark.appendChild(newImage);
+                            newCardBgDark.appendChild(newCardBody);
+                            newColSm3Div.appendChild(newCardBgDark);
+                            document.getElementById("carouselDiv"+currentDiv).appendChild(newColSm3Div);
+
+                        }else{
+                            //add another DIV and insert index
+
+                        } 
+                        
+                    }
+
+                    // var olElement = document.createElement("ol");
+                    // olElement.className = "carousel-indicators";
+                    // var liElement = document.createElement("li");
+                    // setMultipleAttributes(liElement, {"data-target": "#carouselExampleIndicators", "data-slide-to": "0"});
+                    // olElement.appendChild(liElement);
+                    // document.getElementById("carouselExampleIndicators").appendChild(olElement);
+                    
+                    //  <div class="row" >
+                    //     <div class="col-sm-3"> ====================== x4 ===============================
+                    //         <div class="card bg-dark " >
+                    //             <img class="card-img-top" alt="card image cap" src="{{asset('assets/img/icedCoffee.jpg')}}">
+                    //                 <div class="card-body" >
+                    //                         <h5 class="card-title text-white">
+                    //                             Iced Coffee Cream
+                    //                         </h5>
+                    //                         <p class="card-text text-white">Php 59.00</p>
+                    //                         <a href="#" class="btn btn-primary">Add Order</a>
+                    //                 </div>
+                    //         </div>
+                    //     </div>
+                    // </div>
+
+
+                    // document.getElementById("carouselExampleIndicators").innerHTML = '\
+                    //         <ol class="carousel-indicators">\
+                    //               <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>\
+                    //             </ol>\
+                    //             <div class="carousel-inner">\
+                    //               <div class="carousel-item active">\========================= DIV 1 ================================
+                    //                 <img src="{{asset('assets/img/greenTea.jpg')}}" class="d-block w-100" alt="...">\
+                    //               </div>\
+                    //               <div class="carousel-item">\========================= DIV 2 ================================
+                    //                   <img src="{{asset('assets/img/icedCoffee.jpg')}}" class="d-block w-100" alt="...">\
+                    //                 </div>\
+                    //                 <div class="carousel-item">\========================= DIV 3 ================================
+                    //                     <img src="{{asset('assets/img/icedPulpy.jpg')}}" class="d-block w-100" alt="...">\
+                    //               </div>\
+                    //             </div>\
+                    //             <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">\
+                    //                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>\
+                    //               <span class="sr-only">Previous</span>\
+                    //             </a>\
+                    //             <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">\
+                    //               <span class="carousel-control-next-icon" aria-hidden="true"></span>\
+                    //               <span class="sr-only">Next</span>\
+                    //             </a>\   
+                    //             ';
+                },
+
+                error:function(data){
+                
+                }
+            });
+
         }
    </script>
 
@@ -69,7 +189,7 @@ class="active"
                                     <td onclick="displayMenusInCarousel(this)" style="border:1px solid black" class="text-center">Inapoy (Rice)</td>
                                     <td style="border:1px solid black" class="text-center">Vegetable</td>
                                     <td style="border:1px solid black" class="text-center">All Time Fav Meryenda</td>
-                                    <td style="border:1px solid black" class="text-center">Drinks</td>
+                                    <td onclick="displayMenusInCarousel(this)" style="border:1px solid black" class="text-center">Drinks</td>
                                     <td style="border:1px solid black" class="text-center">Partner El Meryenda</td>
                                     <td style="border:1px solid black" class="text-center">Main Courses</td>
                                     <td style="border:1px solid black" class="text-center">Rapsilog</td>
@@ -97,8 +217,8 @@ class="active"
                             <div class="card-header" style="background-color:slategrey;color:white">Drinks</div>
                     </div>
                     {{-- Carousel by 4 images Example--}}
-                    <div class="row" >
-                        <div class="col-sm-6">
+                    {{-- <div class="row" >
+                        <div class="col-sm-3">
                             <div class="card bg-dark " >
                                 <img class="card-img-top" alt="card image cap" src="{{asset('assets/img/icedCoffee.jpg')}}">
                                     <div class="card-body" >
@@ -110,7 +230,7 @@ class="active"
                                     </div>
                             </div>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-3">
                             <div class="card bg-dark text-white" >
                                 <img class="card-img-top" alt="card image cap" src="{{asset('assets/img/icedPulpy.jpg')}}">
                                     <div class="card-body" >
@@ -122,7 +242,7 @@ class="active"
                                     </div>
                             </div>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-3">
                             <div class="card bg-dark text-white" >
                                 <img class="card-img-top" alt="card image cap" src="{{asset('assets/img/greenTea.jpg')}}">
                                     <div class="card-body" >
@@ -134,7 +254,7 @@ class="active"
                                         </div>
                                     </div>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-3">
                             <div class="card bg-dark text-white" >
                                 <img class="card-img-top" alt="card image cap" src="{{asset('assets/img/greenTea.jpg')}}">
                                     <div class="card-body" >
@@ -146,34 +266,25 @@ class="active"
                                         </div>
                                     </div>
                         </div>       
-                    </div>
+                    </div> --}}
+
                         {{-- Carousel by 4 images Template : Do it here--}}
-                        {{-- <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-                                <ol class="carousel-indicators">
-                                  <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-                                  <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-                                  <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-                                </ol>
-                                <div class="carousel-inner">
-                                  <div class="carousel-item active">
-                                    <img src="{{asset('assets/img/greenTea.jpg')}}" class="d-block w-100" alt="...">
-                                  </div>
-                                  <div class="carousel-item">
-                                      <img src="{{asset('assets/img/greenTea.jpg')}}" class="d-block w-100" alt="...">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="{{asset('assets/img/greenTea.jpg')}}" class="d-block w-100" alt="...">
-                                  </div>
-                                </div>
-                                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                  <span class="sr-only">Previous</span>
-                                </a>
-                                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-                                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                  <span class="sr-only">Next</span>
-                                </a>
-                        </div> --}}
+                        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                            <ol class="carousel-indicators">
+                                {{-- insert here --}}
+                            </ol>
+                            <div class="carousel-inner">
+                                {{-- insert here --}}
+                            </div>
+                            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
 
 
                 </div>
@@ -214,16 +325,15 @@ class="active"
                                                 <th class="text-left" style="color:black">Qty</th>
                                                 <th class="text-left" style="color:black">Amount</th>
                                                 <th class="text-left" style="color:black">Action</th>
-                                                <th class="text-left" style="color:black">Option</th>
                                             </tr> 
             
                                         </thead>
                                         <tbody>
                                             <td>Green Tea</td>
-                                            <td>1</td>
+                                            <td><input style="width: 100px;" type="number" value="1" class="form-control"></td>
                                             <td>39.00</td>
-                                            <td>Cancel</td>
-                                            <td>Add</td>
+                                            <td><button class="btn btn-danger">X</button><button class="btn btn-success">Options</button></td>
+                                        
                                         </tbody>
                                     </table>
                                     <br>

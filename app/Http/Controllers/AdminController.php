@@ -5,7 +5,7 @@ use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use DB;
 use Datatables;
-
+use App\Product;
 
 class AdminController extends Controller
 {
@@ -68,15 +68,41 @@ class AdminController extends Controller
             ->addColumn('action',function($data){
                 return "
                 <a href = '#editMenuModal' data-toggle='modal' >
-                    <button onclick='editMenu(this)'class='btn btn-info' ><i class='glyphicon glyphicon-th-list'></i> View</button>
+                    <button onclick='editMenu(this)'class='btn btn-info' ><i class='glyphicon glyphicon-th-list'></i> Edit</button>
                 </a>
                 ";
             })
          ->make(true);
     }
+    public function createProduct(Request $request){
+        $this->validate($request,[
+            'ProductName' => 'required',
+            'Price' => 'required',
+            'Description' => 'required',
+            'Category' => 'required',
+            // 'product_id' => 'required',
+            'Status' => 'required',
+        ]);
+
+        $insertProduct = DB::table('products')->insert(
+            ['image' => $request->ProductName, 'name' => $request->ProductName, 'price' => $request->Price,'decription' => $request->Description,'category' => $request->Category,'status' => $request->Status]
+        );
+
+        return "successful";
+
+    }
+
     public function orders()
     {
         return view('adminViews.admin-orders');
+    }
+    public function getMenusToCarousel($category)
+    {
+        $data = DB::table('products')
+            ->select('image', 'name','price')
+            ->where('category','=',$category)
+            ->get();
+        return $data;
     }
     public function getManageOrders()
     {

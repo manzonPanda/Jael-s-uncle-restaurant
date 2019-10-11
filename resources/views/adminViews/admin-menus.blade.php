@@ -21,28 +21,55 @@ class="active"
                   'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
               }
              });
-        //   $.fn.dataTable.ext.errMode = 'throw';
-        $('#menusDataTable').DataTable({
-              "destroy": true,
-              "processing": true, 
-              "serverSide": true,
-              "colReorder": true,  
-              //"autoWidth": true,
-              "pagingType": "full_numbers",
+            //   $.fn.dataTable.ext.errMode = 'throw';
+            $('#menusDataTable').DataTable({
+                "destroy": true,
+                "processing": true, 
+                "serverSide": true,
+                "colReorder": true,  
+                //"autoWidth": true,
+                "pagingType": "full_numbers",
 
-              "ajax":  "{{ route('menus.getMenus') }}",
-              "columns": [
-                  {data: 'image'},
-                  {data: 'name'},
-                  {data: 'price'},
-                  {data: 'category'},
-                  {data: 'status'},
-                  {data: 'action'},
-              ]
+                "ajax":  "{{ route('menus.getMenus') }}",
+                "columns": [
+                    {data: 'image'},
+                    {data: 'name'},
+                    {data: 'price'},
+                    {data: 'category'},
+                    {data: 'status'},
+                    {data: 'action'},
+                ]
+            });
+
+            $('#formAddMenu').on('submit',function(e){
+              e.preventDefault();
+              var data = $(this).serialize();
+
+                $.ajax({
+                    type:'POST',
+                    url: "{{route('admin.createProduct')}}",
+                    data: data,
+
+                    success:function(data){
+                        if(data === "successful"){
+                            console.log("insert successful");
+                        }
+
+                    },
+
+                    error:function(data){
+                        console.log("error!")
+                    }
+
+                });
+
             });
 
          });
 
+         function editMenu(){
+             alert("under construction:)")
+         }
     </script>
 @endsection
 
@@ -137,7 +164,7 @@ class="active"
                                     {{Form::label('Price', 'Price:')}}
                                 </div>
                                 <div class="col-md-9">
-                                    {{Form::text('Price','',['class'=>'form-control','value'=>''])}}
+                                    {{Form::number('Price','',['class'=>'form-control','value'=>''])}}
                                 </div>
                             </div>
                         </div>
@@ -168,7 +195,7 @@ class="active"
                                         {{Form::label('Status', 'Status:')}}
                                     </div>
                                     <div class="col-md-9">
-                                        {{Form::select('radioButton',['active'=>'Active','inactive'=>'Inactive'],'Active',['class'=>'form-control '])}}                                          
+                                        {{Form::select('Status',['active'=>'Active','inactive'=>'Inactive'],'Active',['class'=>'form-control '])}}                                          
                                     </div>
                                     
                                 </div>
