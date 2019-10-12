@@ -15,7 +15,6 @@ class="active"
     
     <script type="text/javascript">
         $(document).ready(function(){
-
            $.ajaxSetup({
              headers: {
                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -29,7 +28,6 @@ class="active"
              "colReorder": true,  
              //"autoWidth": true,
              "pagingType": "full_numbers",
-
              "ajax":  "{{ route('orders.getManageOrders') }}",
              "columns": [
                  {data: 'receiptNumber'},
@@ -39,18 +37,58 @@ class="active"
                  {data: 'action'},
              ]
            });
-
         });
-        //Helper
+        //Helpers
         function setMultipleAttributes(el, attrs) {
+		
             for(var key in attrs) {
                 el.setAttribute(key, attrs[key]);
             }
         }
-        function displayMenusInCarousel(button){
+		function createCarouselInRow(data,currentDiv){
+			var newColSm3Div = document.createElement("div");
+				newColSm3Div.setAttribute("class","cols-sm-3");
+			var newCardBgDark = document.createElement("div");
+				newCardBgDark.setAttribute("class","card bg-dark");
+			var newImage = document.createElement("img");
+				setMultipleAttributes(newImage,{"class":"card-img-top","src":data[0].image});
+			var newCardBody = document.createElement("div");
+				newCardBody.setAttribute("class","card-body");
+			var newH5 = document.createElement("h5");
+				setMultipleAttributes(newH5,{"class":"card-title text-white"})
+				var productName = document.createTextNode(data[0].productName);
+				newH5.appendChild(productName);
+			var newPriceTag = document.createElement("p");
+				setMultipleAttributes(newPriceTag,{"class":"card-text text-white"});
+				var price = document.createTextNode(data[0].price);
+				newPriceTag.appendChild(price);
+			var newButton = document.createElement("a");
+				setMultipleAttributes(newButton,{"href":"#","class":"btn bt-primary"});
+				var textNode = document.createTextNode("Add Order");
+				newButton.appendChild(textNode);
+			newCardBody.appendChild(newH5);
+			newCardBody.appendChild(newPriceTag);
+			newCardBody.appendChild(newButton);
+			newCardBgDark.appendChild(newImage);
+			newCardBgDark.appendChild(newCardBody);
+			newColSm3Div.appendChild(newCardBgDark);
+			document.getElementById("carouselDiv"+currentDiv).appendChild(newColSm3Div);
+		}
+        function createCarousel(currentDiv){
+			//initialize nth li(indicator) and nth DV1
+			var newIndicatorElement = document.createElement("li");
+				setMultipleAttributes(newIndicatorElement, {"data-target": "#carouselExampleIndicators", "data-slide-to": "0"});
+				document.getElementById("carouselExampleIndicators").children[0].appendChild(newIndicatorElement);
+			var newDiv = document.createElement("div");
+				setMultipleAttributes(newDiv,{"class":"carousel-item active","id":"carouselDiv"+currentDiv})
+				var newRow = document.createElement("div");
+				newRow.setAttribute("class","row");
+				newDiv.appendChild( newRow );
+				document.getElementById("carouselExampleIndicators").children[1].appendChild(newDiv);
+		}
+		function displayMenusInCarousel(button){
             console.log(button.innerHTML);
             var fullRoute = "/admin/orders/getMenusToCarousel/"+button.innerHTML;
-
             $.ajax({
                 type:'GET',
                 url:fullRoute,
@@ -61,63 +99,32 @@ class="active"
                     console.log(data)
                     var currentDiv = 1;
                     var numberOfMenuPerCarousel = 4;
-                    //initialize first li and first DV1
-                    var newIndicatorElement = document.createElement("li");
-                        setMultipleAttributes(newIndicatorElement, {"data-target": "#carouselExampleIndicators", "data-slide-to": "0"});
-                        document.getElementById("carouselExampleIndicators").children[0].appendChild(newIndicatorElement);
-                    var newDiv = document.createElement("div");
-                        setMultipleAttributes(newDiv,{"class":"carousel-item active","id":"carouselDiv"+currentDiv})
-                        var newRow = document.createElement("div");
-                        newRow.setAttribute("class","row");
-                        newDiv.appendChild( newRow );
-                        document.getElementById("carouselExampleIndicators").children[1].appendChild(newDiv);
-
+                    //create nth li(indicator) and nth DV1
+                    createCarousel(currentDiv);
                     for (var i = 0; i < data.length; i++) {
                         if( numberOfMenuPerCarousel / i > 1){
-                            //insert index to the current DIV
-                            var newColSm3Div = document.createElement("div");
-                                newColSm3Div.setAttribute("class","cols-sm-3");
-                            var newCardBgDark = document.createElement("div");
-                                newCardBgDark.setAttribute("class","card bg-dark");
-                            var newImage = document.createElement("img");
-                                setMultipleAttributes(newImage,{"class":"card-img-top","src":data[0].image});
-                            var newCardBody = document.createElement("div");
-                                newCardBody.setAttribute("class","card-body");
-                            var newH5 = document.createElement("h5");
-                                setMultipleAttributes(newH5,{"class":"card-title text-white"})
-                                var productName = document.createTextNode(data[0].productName);
-                                newH5.appendChild(productName);
-                            var newPriceTag = document.createElement("p");
-                                setMultipleAttributes(newPriceTag,{"class":"card-text text-white"});
-                                var price = document.createTextNode(data[0].price);
-                                newPriceTag.appendChild(price);
-                            var newButton = document.createElement("a");
-                                setMultipleAttributes(newButton,{"href":"#","class":"btn bt-primary"});
-                                var textNode = document.createTextNode("Add Order");
-                                newButton.appendChild(textNode);
-                            newCardBody.appendChild(newH5);
-                            newCardBody.appendChild(newPriceTag);
-                            newCardBody.appendChild(newButton);
-                            newCardBgDark.appendChild(newImage);
-                            newCardBgDark.appendChild(newCardBody);
-                            newColSm3Div.appendChild(newCardBgDark);
-                            document.getElementById("carouselDiv"+currentDiv).appendChild(newColSm3Div);
-
+                            //insert index(i) to the current DIV
+                           createCarouselInRow(data,currentDiv);
                         }else{
-                            //add another DIV and insert index
-
+                            //add another DIV and insert index(i)
+							currentDiv++;
+							numberOfMenuPerCarousel += 4;
+							//create nth li(indicator) and nth DV1
+							createCarousel(currentDiv);
+							//then insert index(i) to the current DIV
+							createCarouselInRow(data,currentDiv);
                         } 
                         
                     }
-
                     // var olElement = document.createElement("ol");
                     // olElement.className = "carousel-indicators";
                     // var liElement = document.createElement("li");
                     // setMultipleAttributes(liElement, {"data-target": "#carouselExampleIndicators", "data-slide-to": "0"});
                     // olElement.appendChild(liElement);
                     // document.getElementById("carouselExampleIndicators").appendChild(olElement);
-                    
-                    //  <div class="row" >
+						
+						//========= DIV1 - DIV2 -  DIV3 ... =========
+                    //  <div class="row" > =========1 row for every 4=========
                     //     <div class="col-sm-3"> ====================== x4 ===============================
                     //         <div class="card bg-dark " >
                     //             <img class="card-img-top" alt="card image cap" src="{{asset('assets/img/icedCoffee.jpg')}}">
@@ -131,8 +138,6 @@ class="active"
                     //         </div>
                     //     </div>
                     // </div>
-
-
                     // document.getElementById("carouselExampleIndicators").innerHTML = '\
                     //         <ol class="carousel-indicators">\
                     //               <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>\
@@ -158,12 +163,10 @@ class="active"
                     //             </a>\   
                     //             ';
                 },
-
                 error:function(data){
                 
                 }
             });
-
         }
    </script>
 
