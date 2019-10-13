@@ -37,6 +37,9 @@ Route::get('/admin/orders/getManageOrders', 'AdminController@getManageOrders')->
 Route::Get('/admin/orders/getMenusToCarousel/{category}', 'AdminController@getMenusToCarousel');
 // Route::get('admin/orders/getMenusToCarousel', 'AdminController@getMenusToCarousel')->name('orders.getMenusToCarousel');
 
+Route::get('/admin/tables', 'AdminController@tables')->name('admin.tables');
+Route::get('/admin/tables/getManageTables', 'AdminController@getManageTables')->name('tables.getManageTables');
+Route::Post('admin/menus/createTable', 'AdminController@createTable')->name('admin.createTable');
 
 Route::get('/admin/reports', 'AdminController@reports')->name('admin.reports');
 Route::get('/admin/aboutUs', 'AdminController@aboutUs')->name('admin.aboutUs');
