@@ -119,6 +119,47 @@ class AdminController extends Controller
          ->make(true);
     }
 
+    public function tables()
+    {
+        return view('adminViews.admin-tables');
+    }
+    
+    public function createTable(Request $request)
+    {
+        $this->validate($request,[
+            'TableName' => 'required',
+            'Capacity' => 'required',
+            'Status' => 'required',
+
+        ]);
+
+        $insertTable = DB::table('tables')->insert(
+            ['tableName' => $request->TableName, 'capacity' => $request->Capacity, 'status' => $request->Status]
+        );
+
+        return "successful";
+    }
+    
+    public function getManageTables()
+    {
+        $data = DB::table('tables')
+        ->select('tableName','capacity','status');
+        return Datatables::of($data)
+            ->addColumn('action',function($data){
+                return "
+                <a href = '#editTableModal' data-toggle='modal' >
+                    <button onclick='editTable(this)'class='btn btn-info' ><i class='glyphicon glyphicon-th-list'></i> Edit</button>
+                </a>
+                <a href = '#deleteTableModal' data-toggle='modal' >
+                    <button onclick='deleteTable(this)'class='btn btn-danger' ><i class='glyphicon glyphicon-th-list'></i> Del</button>
+                </a>
+                ";
+            })
+         ->make(true);
+    }
+        
+
+    
     public function reports()
     {
         return view('adminViews.admin-reports');
