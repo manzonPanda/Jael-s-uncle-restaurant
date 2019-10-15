@@ -188,24 +188,24 @@ class="active"
                             </thead>
                             <tbody>
                                 <tr >
-                                    <td  style="border:1px solid black" class="text-center">All</td>
+                                    <td onclick="displayMenusInCarousel(this)" style="border:1px solid black" class="text-center">All</td>
                                     <td onclick="displayMenusInCarousel(this)" style="border:1px solid black" class="text-center">Inapoy (Rice)</td>
-                                    <td style="border:1px solid black" class="text-center">Vegetable</td>
-                                    <td style="border:1px solid black" class="text-center">All Time Fav Meryenda</td>
+                                    <td onclick="displayMenusInCarousel(this)" style="border:1px solid black" class="text-center">Vegetable</td>
+                                    <td onclick="displayMenusInCarousel(this)" style="border:1px solid black" class="text-center">All Time Fav Meryenda</td>
                                     <td onclick="displayMenusInCarousel(this)" style="border:1px solid black" class="text-center">Drinks</td>
-                                    <td style="border:1px solid black" class="text-center">Partner El Meryenda</td>
-                                    <td style="border:1px solid black" class="text-center">Main Courses</td>
-                                    <td style="border:1px solid black" class="text-center">Rapsilog</td>
-                                    <td style="border:1px solid black" class="text-center">Partner Meal</td>
-                                    <td style="border:1px solid black" class="text-center">Pizza De Alfredo</td>
-                                    <td style="border:1px solid black" class="text-center">Additional</td>
-                                    <td style="border:1px solid black" class="text-center">Pulotan/Appetizer</td>
-                                    <td style="border:1px solid black" class="text-center">Desserts</td>
-                                    <td style="border:1px solid black" class="text-center">Drinks And Beverages</td>
-                                    <td style="border:1px solid black" class="text-center">All Time Fav Shakes</td>
-                                    <td style="border:1px solid black" class="text-center">Buckets</td>
-                                    <td style="border:1px solid black" class="text-center">Noodles and Pasta</td>
-                                    <td style="border:1px solid black" class="text-center">Bilao</td>
+                                    <td onclick="displayMenusInCarousel(this)" style="border:1px solid black" class="text-center">Partner El Meryenda</td>
+                                    <td onclick="displayMenusInCarousel(this)" style="border:1px solid black" class="text-center">Main Courses</td>
+                                    <td onclick="displayMenusInCarousel(this)" style="border:1px solid black" class="text-center">Rapsilog</td>
+                                    <td onclick="displayMenusInCarousel(this)" style="border:1px solid black" class="text-center">Partner Meal</td>
+                                    <td onclick="displayMenusInCarousel(this)" style="border:1px solid black" class="text-center">Pizza De Alfredo</td>
+                                    <td onclick="displayMenusInCarousel(this)" style="border:1px solid black" class="text-center">Additional</td>
+                                    <td onclick="displayMenusInCarousel(this)" style="border:1px solid black" class="text-center">Pulotan/Appetizer</td>
+                                    <td onclick="displayMenusInCarousel(this)" style="border:1px solid black" class="text-center">Desserts</td>
+                                    <td onclick="displayMenusInCarousel(this)" style="border:1px solid black" class="text-center">Drinks And Beverages</td>
+                                    <td onclick="displayMenusInCarousel(this)" style="border:1px solid black" class="text-center">All Time Fav Shakes</td>
+                                    <td onclick="displayMenusInCarousel(this)" style="border:1px solid black" class="text-center">Buckets</td>
+                                    <td onclick="displayMenusInCarousel(this)" style="border:1px solid black" class="text-center">Noodles and Pasta</td>
+                                    <td onclick="displayMenusInCarousel(this)" style="border:1px solid black" class="text-center">Bilao</td>
 
                                 </tr>
                             </tbody>
@@ -315,7 +315,7 @@ class="active"
                                 </div>
                                 <div class="col-md-3" margin >
                                     {{Form::label('Date', 'Date:')}}
-                                    <input type="date" name="Date" id="today"  oninput="enablePrintButton(this)"  class="form-control"/>    
+                                    <input type="date" name="Date" id="today" class="form-control"/>    
                                 </div>
                             </div>        
                             <br>
@@ -397,9 +397,11 @@ class="active"
                             <thead>
                                 <tr>
                                     <th class="text-left">Reciept #</th>
+                                    <th class="text-left">Table #</th>
+                                    <th class="text-left">Cutomer Name</th>
                                     <th class="text-left">Total Products</th>
                                     <th class="text-left">Date & Time</th>
-                                    <th class="text-left">Paid Status</th>
+                                    <th class="text-left">Payment Status</th>
                                     <th class="text-left">Action</th>
                                 </tr>
                             </thead>
