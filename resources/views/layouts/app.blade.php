@@ -75,6 +75,12 @@
                                 <p>Orders</p>
                             </a>
                         </li>
+                        <li @yield('tables_link')>
+                            <a class="nav-link" href="{{route('admin.tables')}}">
+                                <i class="nc-icon nc-paper-2"></i>
+                                <p>Tables</p>
+                            </a>
+                        </li>
                         <li @yield('reports_link')>
                             <a class="nav-link" href="{{route('admin.reports')}}">
                                 <i class="nc-icon nc-atom"></i>

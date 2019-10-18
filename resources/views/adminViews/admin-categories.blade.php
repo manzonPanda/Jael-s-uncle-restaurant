@@ -38,6 +38,28 @@ class="active"
               ]
             });
 
+            $('#formAddCategory').on('submit',function(e){
+                e.preventDefault();
+                var data = $(this).serialize();
+                  $.ajax({
+                    type:'POST',
+                    url: "{{route('admin.createCategories')}}",
+                    data: data,
+                    success:function(data){
+                        if(data === "successful"){
+                            console.log("categories created successful");
+                            //close modal
+                            $('#addCategory').modal('hide')   
+                            document.getElementById("formAddCategory").reset(); //reset the form
+                            $("#categoriesDataTable").DataTable().ajax.reload();//reload the dataTables
+                        }
+                    },
+                    error:function(data){
+                        console.log("error!")
+                    }
+                });
+            });
+
          });
 
     </script>
@@ -49,7 +71,7 @@ class="active"
     <div class="container-fluid">
         <div class="row">
 
-            <div class="col-lg-12 col-md-12 col-sm-12">
+            {{-- <div class="col-lg-12 col-md-12 col-sm-12">
                 <div class="card">
                     <div class="card-header" style="background-color:red;font-color:white">!UNDER CONSTRUCTION!</div>
 
@@ -62,7 +84,7 @@ class="active"
 
                     </div>
                 </div>
-            </div>
+            </div> --}}
 
             <div class="col-md-4 ">
                 <p>
@@ -123,10 +145,10 @@ class="active"
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-md-3">
-                                    {{Form::label('Category', 'Category Name:')}}
+                                    {{Form::label('CategoryName', 'Category Name:')}}
                                 </div>
                                 <div class="col-md-9">
-                                    {{Form::text('Category','',['class'=>'form-control','value'=>''])}}
+                                    {{Form::text('CategoryName','',['class'=>'form-control','value'=>''])}}
                                 </div>
                             </div>
                         </div>
@@ -137,7 +159,7 @@ class="active"
                                         {{Form::label('Status', 'Status:')}}
                                     </div>
                                     <div class="col-md-9">
-                                        {{Form::select('radioButton',['active'=>'Active','inactive'=>'Inactive'],'Active',['class'=>'form-control '])}}                                          
+                                        {{Form::select('Status',['active'=>'Active','inactive'=>'Inactive'],'Active',['class'=>'form-control '])}}                                          
                                     </div>
                                     
                                 </div>

@@ -45,26 +45,26 @@ class="active"
                 el.setAttribute(key, attrs[key]);
             }
         }
-		function createCarouselInRow(data,currentDiv){
+		function createCarouselInRow(data,currentDiv,index){
 			var newColSm3Div = document.createElement("div");
-				newColSm3Div.setAttribute("class","cols-sm-3");
+				newColSm3Div.setAttribute("class","col-sm-3");
 			var newCardBgDark = document.createElement("div");
 				newCardBgDark.setAttribute("class","card bg-dark");
 			var newImage = document.createElement("img");
-				setMultipleAttributes(newImage,{"class":"card-img-top","src":data[0].image});
+				setMultipleAttributes(newImage,{"class":"card-img-top","src":data[index].image});
 			var newCardBody = document.createElement("div");
 				newCardBody.setAttribute("class","card-body");
 			var newH5 = document.createElement("h5");
 				setMultipleAttributes(newH5,{"class":"card-title text-white"})
-				var productName = document.createTextNode(data[0].productName);
+				var productName = document.createTextNode(data[index].name);
 				newH5.appendChild(productName);
 			var newPriceTag = document.createElement("p");
 				setMultipleAttributes(newPriceTag,{"class":"card-text text-white"});
-				var price = document.createTextNode(data[0].price);
+				var price = document.createTextNode(data[index].price);
 				newPriceTag.appendChild(price);
 			var newButton = document.createElement("a");
 				setMultipleAttributes(newButton,{"href":"#","class":"btn bt-primary"});
-				var textNode = document.createTextNode("Add Order");
+				var textNode = document.createTextNode("Add");
 				newButton.appendChild(textNode);
 			newCardBody.appendChild(newH5);
 			newCardBody.appendChild(newPriceTag);
@@ -72,15 +72,23 @@ class="active"
 			newCardBgDark.appendChild(newImage);
 			newCardBgDark.appendChild(newCardBody);
 			newColSm3Div.appendChild(newCardBgDark);
-			document.getElementById("carouselDiv"+currentDiv).appendChild(newColSm3Div);
+			document.getElementById("carouselDiv"+currentDiv).firstChild.appendChild(newColSm3Div);
 		}
         function createCarousel(currentDiv){
 			//initialize nth li(indicator) and nth DV1
 			var newIndicatorElement = document.createElement("li");
-				setMultipleAttributes(newIndicatorElement, {"data-target": "#carouselExampleIndicators", "data-slide-to": "0"});
+                if(currentDiv == 1){
+				    setMultipleAttributes(newIndicatorElement, {"data-target": "#carouselExampleIndicators", "data-slide-to": currentDiv-1,"class":"active"});
+                }else{
+				    setMultipleAttributes(newIndicatorElement, {"data-target": "#carouselExampleIndicators", "data-slide-to": currentDiv-1});
+                }
 				document.getElementById("carouselExampleIndicators").children[0].appendChild(newIndicatorElement);
 			var newDiv = document.createElement("div");
-				setMultipleAttributes(newDiv,{"class":"carousel-item active","id":"carouselDiv"+currentDiv})
+                if(currentDiv == 1){
+				    setMultipleAttributes(newDiv,{"class":"carousel-item active","id":"carouselDiv"+currentDiv})
+                }else{
+				    setMultipleAttributes(newDiv,{"class":"carousel-item","id":"carouselDiv"+currentDiv})
+                }
 				var newRow = document.createElement("div");
 				newRow.setAttribute("class","row");
 				newDiv.appendChild( newRow );
@@ -104,7 +112,7 @@ class="active"
                     for (var i = 0; i < data.length; i++) {
                         if( numberOfMenuPerCarousel / i > 1){
                             //insert index(i) to the current DIV
-                           createCarouselInRow(data,currentDiv);
+                           createCarouselInRow(data,currentDiv,i);
                         }else{
                             //add another DIV and insert index(i)
 							currentDiv++;
@@ -112,7 +120,7 @@ class="active"
 							//create nth li(indicator) and nth DV1
 							createCarousel(currentDiv);
 							//then insert index(i) to the current DIV
-							createCarouselInRow(data,currentDiv);
+							createCarouselInRow(data,currentDiv,i);
                         } 
                         
                     }
@@ -270,7 +278,7 @@ class="active"
                                     </div>
                         </div>       
                     </div> --}}
-
+ 
                         {{-- Carousel by 4 images Template : Do it here--}}
                         <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
                             <ol class="carousel-indicators">
@@ -278,12 +286,116 @@ class="active"
                             </ol>
                             <div class="carousel-inner">
                                 {{-- insert here --}}
+                                {{-- <div class="carousel-item active">
+                                        <div class="row" >
+                                                <div class="col-sm-3">
+                                                    <div class="card bg-dark " >
+                                                        <img class="card-img-top" alt="card image cap" src="{{asset('assets/img/icedCoffee.jpg')}}">
+                                                            <div class="card-body" >
+                                                                    <h5 class="card-title text-white">
+                                                                        Iced Coffee Cream
+                                                                    </h5>
+                                                                    <p class="card-text text-white">Php 59.00</p>
+                                                                    <a href="#" class="btn btn-primary">Add Order</a>
+                                                            </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <div class="card bg-dark text-white" >
+                                                        <img class="card-img-top" alt="card image cap" src="{{asset('assets/img/icedPulpy.jpg')}}">
+                                                            <div class="card-body" >
+                                                                    <h5 class="card-title text-white">
+                                                                        Iced Pulpy Pineapple 
+                                                                    </h5>
+                                                                    <p class="card-text">Php 59.00</p>
+                                                                    <a href="#" class="btn btn-primary">Add Order</a>
+                                                            </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <div class="card bg-dark text-white" >
+                                                        <img class="card-img-top" alt="card image cap" src="{{asset('assets/img/greenTea.jpg')}}">
+                                                            <div class="card-body" >
+                                                                    <h5 class="card-title text-white">
+                                                                        Green tea 
+                                                                    </h5>
+                                                                    <p class="card-text">Php 39.00</p>
+                                                                    <a href="#" class="btn btn-primary">Add Order</a>
+                                                                </div>
+                                                            </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <div class="card bg-dark text-white" >
+                                                        <img class="card-img-top" alt="card image cap" src="{{asset('assets/img/greenTea.jpg')}}">
+                                                            <div class="card-body" >
+                                                                    <h5 class="card-title text-white">
+                                                                        Green tea 
+                                                                    </h5>
+                                                                    <p class="card-text">Php 39.00</p>
+                                                                    <a href="#" class="btn btn-primary">Add Order</a>
+                                                                </div>
+                                                            </div>
+                                                </div>       
+                                            </div>
+                                </div>
+                                <div class="carousel-item">
+                                        <div class="row" >
+                                                <div class="col-sm-3">
+                                                    <div class="card bg-dark " >
+                                                        <img class="card-img-top" alt="card image cap" src="{{asset('assets/img/icedCoffee.jpg')}}">
+                                                            <div class="card-body" >
+                                                                    <h5 class="card-title text-white">
+                                                                        Iced Coffee Cream
+                                                                    </h5>
+                                                                    <p class="card-text text-white">Php 59.00</p>
+                                                                    <a href="#" class="btn btn-primary">Add Order</a>
+                                                            </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <div class="card bg-dark text-white" >
+                                                        <img class="card-img-top" alt="card image cap" src="{{asset('assets/img/icedPulpy.jpg')}}">
+                                                            <div class="card-body" >
+                                                                    <h5 class="card-title text-white">
+                                                                        Iced Pulpy Pineapple 
+                                                                    </h5>
+                                                                    <p class="card-text">Php 59.00</p>
+                                                                    <a href="#" class="btn btn-primary">Add Order</a>
+                                                            </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <div class="card bg-dark text-white" >
+                                                        <img class="card-img-top" alt="card image cap" src="{{asset('assets/img/greenTea.jpg')}}">
+                                                            <div class="card-body" >
+                                                                    <h5 class="card-title text-white">
+                                                                        Green tea 
+                                                                    </h5>
+                                                                    <p class="card-text">Php 39.00</p>
+                                                                    <a href="#" class="btn btn-primary">Add Order</a>
+                                                                </div>
+                                                            </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <div class="card bg-dark text-white" >
+                                                        <img class="card-img-top" alt="card image cap" src="{{asset('assets/img/greenTea.jpg')}}">
+                                                            <div class="card-body" >
+                                                                    <h5 class="card-title text-white">
+                                                                        Green tea 
+                                                                    </h5>
+                                                                    <p class="card-text">Php 39.00</p>
+                                                                    <a href="#" class="btn btn-primary">Add Order</a>
+                                                                </div>
+                                                            </div>
+                                                </div>       
+                                            </div>
+                                </div> --}}
                             </div>
-                            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                            <a class="carousel-control-prev" style="width:3ch" href="#carouselExampleIndicators" role="button" data-slide="prev">
                                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                                 <span class="sr-only">Previous</span>
                             </a>
-                            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                            <a class="carousel-control-next" style="width:3ch" href="#carouselExampleIndicators" role="button" data-slide="next">
                                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                 <span class="sr-only">Next</span>
                             </a>
@@ -335,7 +447,9 @@ class="active"
                                             <td>Green Tea</td>
                                             <td><input style="width: 100px;" type="number" value="1" class="form-control"></td>
                                             <td>39.00</td>
-                                            <td><button class="btn btn-danger">X</button><button class="btn btn-success">Options</button></td>
+                                            <td><button class="btn btn-danger">X</button>
+                                                {{-- <button class="btn btn-success">Options</button> --}}
+                                            </td>
                                         
                                         </tbody>
                                     </table>
@@ -343,6 +457,18 @@ class="active"
                                     <br>
                                     <div class="form-group">
                                         <div class="row">
+                                            <div class="col-md-8 text-right">
+                                                <div class="dropdown">
+                                                        <button class="btn btn-secondary dropdown-toggle" type="button" id="tableChoices" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                            Table
+                                                        </button>
+                                                        <div class="dropdown-menu" aria-labelledby="tableChoices">
+                                                            <button class="dropdown-item" type="button">Table 1</button>
+                                                            <button class="dropdown-item" type="button">Table 2</button>
+                                                            <button class="dropdown-item" type="button">Table 5</button>
+                                                        </div>
+                                                </div>
+                                            </div>
                                             <div class="col-md-8 text-right">
                                                 <label>Total Amount:</label>
                                             </div>

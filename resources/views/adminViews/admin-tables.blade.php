@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('settings_link')
+@section('tables_link')
 class="active"
 @endsection
 
@@ -31,6 +31,10 @@ class="active"
                     success:function(data){
                         if(data === "successful"){
                             console.log("table created successful");
+                            //close modal
+                            $('#addTable').modal('hide')   
+                            document.getElementById("formAddTable").reset(); //reset the form
+                            $("#manageTablesDataTable").DataTable().ajax.reload();//reload the dataTables
                         }
                     },
                     error:function(data){
@@ -50,12 +54,14 @@ class="active"
                "columns": [
                    {data: 'tableName'},
                    {data: 'capacity'},
+                   {data: 'status'},
                    {data: 'action'},
                ]
              });
            
             
           });
+
 	</script>
 @endsection
 
@@ -64,8 +70,8 @@ class="active"
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12">
-                <div class="card">
-                    <div class="card-header" style="background-color:red;font-color:white">Manage Tables</div>
+                {{-- <div class="card"> --}}
+                    {{-- <div class="card-header" style="background-color:red;font-color:white">Manage Tables</div> --}}
 					
                     <div class="col-md-4 ">
                       <p>
@@ -75,7 +81,7 @@ class="active"
                       </p>
                     </div>
 					
-                </div>
+                {{-- </div> --}}
             </div>
         </div>
         
@@ -94,6 +100,7 @@ class="active"
                               <tr>
                                   <th class="text-left">Table Name</th>
                                   <th class="text-left">Capacity</th>
+                                  <th class="text-left">Status</th>
                                   <th class="text-left">Action</th>
                               </tr>
                           </thead>
@@ -155,7 +162,17 @@ class="active"
 									</div>
 								</div>
 							</div>
-
+                            <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            {{Form::label('Status', 'Status:')}}
+                                        </div>
+                                        <div class="col-md-9">
+                                            {{Form::select('Status',['active'=>'Active','inactive'=>'Inactive'],'Active',['class'=>'form-control '])}}                                          
+                                        </div>
+                                        
+                                    </div>
+                            </div>
 							<div class="row">
 									<div class="text-right">                                           
 										<div class="col-md-12">   
@@ -172,6 +189,9 @@ class="active"
 			
 			</div>
 		</div>
-	</div>
+    </div>
+    <div id="editTableModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="viewLabel" aria-hidden="true">
+
+    </div>
 @endsection
 

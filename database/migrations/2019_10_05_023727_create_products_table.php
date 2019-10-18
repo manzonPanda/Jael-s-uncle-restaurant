@@ -16,14 +16,19 @@ class CreateProductsTable extends Migration
         Schema::create('products', function (Blueprint $table) {
             
             $table->integer('product_id')->autoIncrement()->unique();
-            $table->string('image');
+            $table->string('image')->nullable();
             $table->string('name');
-            $table->decimal('price',7,2);
-            $table->string('decription',45);
-            $table->string('category');
+            $table->enum('size',['xs', 'small','medium','large','regular','xl','none']);
+            // $table->integer('category_id');
+            $table->decimal('price',7,2)->nullable();
+            $table->string('description',100)->nullable();
             $table->enum('status', ['ACTIVE', 'INACTIVE']);   
             $table->rememberToken();  
             $table->timestamps();
+
+            // $table->foreign('category_id')->references('category_id')->on('categories');
+
+
         });
     }
 
