@@ -33,7 +33,7 @@ class="active"
               "ajax":  "{{ route('categories.getCategories') }}",
               "columns": [
                   {data: 'categoryName'},
-                  {data: 'status'},
+                //   {data: 'status'},
                   {data: 'action'},
               ]
             });
@@ -61,6 +61,31 @@ class="active"
             });
 
          });
+         function insertDataToEditCategoryModal(button){
+            var data  = $(button.parentNode.parentNode.parentNode.innerHTML).slice(0,-1);
+            console.log(data)
+            document.getElementById("categoryName").value = data[0].innerHTML;
+            document.getElementById("categoryId").value = button.parentNode.parentNode.lastChild.id;
+
+            // $("#errorDivEditItem").html("");
+        }
+        function formUpdateCategoryStatus(categoryStatus,categoryId){
+            //0 == INACTIVE && 1 == ACTIVE
+         var fullRoute = "/admin/categories/updateStatus"; //id
+            $.ajax({
+                type:'Post',
+                url: fullRoute,
+                dataType:'json',
+                data:{
+                    'categoryId':categoryId,
+                    'categoryStatus': categoryStatus 
+                },
+                success:function(data){                                 
+                    $("#categoriesDataTable").DataTable().ajax.reload();//reload the dataTables                        
+                }
+            });
+
+        }
 
     </script>
 @endsection
@@ -101,7 +126,7 @@ class="active"
                         <thead>
                             <tr>
                                 <th class="text-left">Category Name</th>
-                                <th class="text-left">Status</th>
+                                {{-- <th class="text-left">Status</th> --}}
                                 <th class="text-left">Action</th>
                             </tr>
                         </thead>
@@ -181,4 +206,61 @@ class="active"
         </div>
     </div>
 </div>
+<div id="editCategoryModal" class="modal fade" tabindex="-1" role = "dialog" aria-labelledby = "viewLabel" aria-hidden="true">
+        <div class = "modal-dialog modal-md">
+            <div class = "modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title"><i class=" fa fa-edit" style="margin-right: 10px"></i> Edit</h3>
+                    <button class="close" data-dismiss="modal">&times;</button>
+                </div>
+                
+                {!! Form::open(['method'=>'post','id'=>'formEditCategory']) !!}
+                <input type="hidden" id="categoryId" name="categoryId" >
+                <div class="modal-body">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <strong>
+                                <span class="glyphicon glyphicon-th"></span>
+                                Information
+                            </strong>
+                        </div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        {{Form::label('categoryName', 'Category Name:')}}
+                                    </div>
+                                    <div class="col-md-9">
+                                        {{Form::text('categoryName','',['class'=>'form-control','id'=>'categoryName'])}}
+                                    </div>
+                                </div>
+                            </div>
+                            {{-- <div class="form-group">   
+                                <div class="row">
+                                    <div class="col-md-3">                                                             
+                                        {{Form::label('categoryPrice', 'Price:')}}
+                                    </div>
+                                    <div class="col-md-9">                                 
+                                        {{Form::number('categoryPrice','',['class'=>'form-control','id'=>'categoryPrice','min'=>'1'])}}
+                                    </div>
+                                </div>
+                            </div> --}}
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="text-right">                                           
+                                <div class="col-md-12">   
+                                    <button  type="submit" class="btn btn-success">Save</button>
+                                    <button class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {!! Form::close() !!}
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection

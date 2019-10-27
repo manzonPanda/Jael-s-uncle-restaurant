@@ -20,7 +20,8 @@ class CreateProductsTable extends Migration
             $table->string('name');
             $table->enum('size',['xs', 'small','medium','large','regular','xl','none']);
             // $table->integer('category_id');
-            $table->decimal('price',7,2)->nullable();
+            // $table->decimal('price',7,2)->nullable();
+            $table->decimal('price',7,2)->default('0.00');
             $table->string('description',100)->nullable();
             $table->enum('status', ['ACTIVE', 'INACTIVE']);   
             $table->rememberToken();  

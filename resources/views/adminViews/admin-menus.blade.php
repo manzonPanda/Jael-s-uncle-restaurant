@@ -15,8 +15,10 @@ class="active"
     
     <script type="text/javascript">
          $(document).ready(function(){
-            // let today = new Date().toISOString().substr(0, 10);
-            // document.querySelector("#today").value = today;
+
+            let today = new Date().toISOString().substr(0, 10);
+            
+            document.querySelector("#today").value = today;
 
             $.ajaxSetup({
               headers: {
@@ -25,6 +27,8 @@ class="active"
              });
             //   $.fn.dataTable.ext.errMode = 'throw';
             $('#menusDataTable').DataTable({
+                // "scrollX":true,
+                // "scrollY":"250px",
                 "destroy": true,
                 "processing": true, 
                 "serverSide": true,
@@ -40,7 +44,7 @@ class="active"
                     {data: 'size'},
                     {data: 'price'},
                     // {data: 'category'},
-                    {data: 'status'},
+                    // {data: 'status'},
                     {data: 'action'},
                 ]
             });
@@ -67,6 +71,28 @@ class="active"
                 });
 
             });
+            $('#formEditMenu').on('submit',function(e){
+              e.preventDefault();
+              var data = $(this).serialize();
+
+                $.ajax({
+                    type:'POST',
+                    url: "{{route('admin.editProduct')}}",
+                    data: data,
+
+                    success:function(data){
+                        $('#editMenuModal').modal('hide')   //close modal
+                        document.getElementById("formEditMenu").reset(); //reset the form
+                        $("#menusDataTable").DataTable().ajax.reload();//reload the dataTables
+                    },
+
+                    error:function(data){
+                        console.log("error!")
+                    }
+
+                });
+
+            });
 
             $('#formCreateBundles').on('submit',function(e){
               e.preventDefault();
@@ -80,7 +106,8 @@ class="active"
                     success:function(data){
                         $('#createBundles').modal('hide')   //close modal
                         document.getElementById("formCreateBundles").reset(); //reset the form
-                       
+                        $('#bundleTable tr').remove();// delete all rows in table
+                        alert('Success')
                     },
 
                     error:function(data){
@@ -99,10 +126,35 @@ class="active"
                 el.setAttribute(key, attrs[key]);
             }
         }
+        function insertDataToModal(button){
+            var data  = $(button.parentNode.parentNode.parentNode.innerHTML).slice(0,-1);
+            console.log(data)
+            document.getElementById("productName").value = data[1].innerHTML;
+            document.getElementById("productDescription").value = data[2].innerHTML;
+            document.getElementById("productSize").value = data[3].innerHTML;
+            document.getElementById("productPrice").value = data[4].innerHTML;
+            // document.getElementById("productStatus").value = data[5].innerHTML;
+            document.getElementById("productId").value = button.parentNode.nextSibling.id;
 
-         function editMenu(){
-             alert("under construction:)")
-         }
+            // $("#errorDivEditItem").html("");
+
+        }
+        function formUpdateProductStatus(productStatus,productId){
+            //0 == INACTIVE && 1 == ACTIVE
+            var fullRoute = "/admin/menus/updateProductStatus"; //id
+            $.ajax({
+                type:'Post',
+                url: fullRoute,
+                dataType:'json',
+                data:{
+                    'productId':productId,
+                    'productStatus': productStatus 
+                },
+                success:function(data){                                 
+                    $("#menusDataTable").DataTable().ajax.reload();//reload the dataTables                        
+                }
+            });
+        }
          function removeRow(a){
             $(a.parentNode.parentNode).hide(500,function(){
                 this.remove();  
@@ -136,8 +188,9 @@ class="active"
                                 var newRow = thatTable.insertRow(-1);
                                 newRow.insertCell(-1).innerHTML = "<td>" +data[i].name+ "</td>";
                                 newRow.insertCell(-1).innerHTML = "<td><input name='quantity[]' type='number' min='1' value='"+data[i].quantity+"' class='form-control'></td>";
-                                newRow.insertCell(-1).innerHTML = "<td><input type='hidden' name='product_id[]' value='" +data[i].productId+ "'><button type='button' onclick='removeRow(this)' class='btn btn-danger form-control'><i class='glyphicon glyphicon-remove'></i>X</button></td>";
+                                newRow.insertCell(-1).innerHTML = "<td><input type='hidden' name='product_id[]' value='" +data[i].product_id+ "'><button type='button' onclick='removeRow(this)' class='btn btn-danger form-control'><i class='glyphicon glyphicon-remove'></i>X</button></td>";
                             }
+                            document.getElementById("bundlePrice").value = data[0].price;
 
                         }else{
                             $("#bundleTable tr").remove();
@@ -325,7 +378,7 @@ class="active"
                                 <th class="text-left">Size</th>
                                 <th class="text-left">Price</th>
                                 {{-- <th class="text-left">Category</th> --}}
-                                <th class="text-left">Status</th>
+                                {{-- <th class="text-left">Status</th> --}}
                                 <th class="text-left">Action</th>
                             </tr>
                         </thead>
@@ -373,6 +426,7 @@ class="active"
                                 </div>
                                 <div class="col-md-9">
                                     {{Form::text('ProductName','',['class'=>'form-control','value'=>''])}}
+                                    <input type="hidden" name="Date" id="today"/>    
                                 </div>
                             </div>
                         </div>
@@ -382,7 +436,7 @@ class="active"
                                     {{Form::label('Price', 'Price:')}}
                                 </div>
                                 <div class="col-md-9">
-                                    {{Form::number('Price','',['class'=>'form-control','value'=>''])}}
+                                    {{Form::number('Price','0',['class'=>'form-control','value'=>'','min'=>'0'])}}
                                 </div>
                             </div>
                         </div>
@@ -492,7 +546,7 @@ class="active"
                                             {{Form::label('Price', 'Price:')}}
                                         </div>
                                         <div class="col-md-9">
-                                            {{Form::number('Price','',['class'=>'form-control','value'=>''])}}
+                                            {{Form::number('Price','',['class'=>'form-control','value'=>'','id'=>'bundlePrice'])}}
                                         </div>
                                     </div>
                                 </div>
@@ -567,6 +621,92 @@ class="active"
                 </div>
             </div>
 
+        </div>
+    </div>
+</div>
+<div id="editMenuModal" class="modal fade" tabindex="-1" role = "dialog" aria-labelledby = "viewLabel" aria-hidden="true">
+    <div class = "modal-dialog modal-md">
+        <div class = "modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class=" fa fa-edit" style="margin-right: 10px"></i> Edit</h3>
+                <button class="close" data-dismiss="modal">&times;</button>
+            </div>
+            
+            {!! Form::open(['method'=>'post','id'=>'formEditMenu']) !!}
+            <input type="hidden" id="productId" name="productId" >
+            <div class="modal-body">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <strong>
+                            <span class="glyphicon glyphicon-th"></span>
+                            Information
+                        </strong>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    {{Form::label('productName', 'Name:')}}
+                                </div>
+                                <div class="col-md-9">
+                                    {{Form::text('productName','',['class'=>'form-control','id'=>'productName'])}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">                                
+                            <div class="row">
+                                <div class="col-md-3">
+                                    {{Form::label('productDescription', 'Description:')}}
+                                </div>
+                                <div class="col-md-9">
+                                    {{ Form::text('productDescription','',['class'=>'form-control','id'=>'productDescription']) }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">    
+                            <div class="row">
+                                <div class="col-md-3">
+                                    {{Form::label('productSize', 'Size:')}}
+                                </div>
+                                <div class="col-md-9">
+                                    {{Form::select('productSize',['xs'=>'XS','small'=>'Small','medium'=>'Medium','large'=>'Large','regular'=>'Regular','xl'=>'XL','none'=>'None'],'none',['class'=>'form-control','id'=>'productSize'])}} 
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">   
+                            <div class="row">
+                                <div class="col-md-3">                                                             
+                                    {{Form::label('productPrice', 'Price:')}}
+                                </div>
+                                <div class="col-md-9">                                 
+                                    {{Form::number('productPrice','',['class'=>'form-control','id'=>'productPrice','min'=>'1'])}}
+                                </div>
+                            </div>
+                        </div>
+                        {{-- <div class="form-group">   
+                            <div class="row">
+                                <div class="col-md-3">                                                             
+                                    {{Form::label('productStatus', 'Status:')}}
+                                </div>
+                                <div class="col-md-9">                                    
+                                        {{Form::select('productStatus',['ACTIVE'=>'Active','INACTIVE'=>'Inactive'],'Active',['class'=>'form-control','id'=>'productStatus'])}}  
+                                </div>
+                            </div>
+                        </div> --}}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="text-right">                                           
+                            <div class="col-md-12">   
+                                <button  type="submit" class="btn btn-success">Save</button>
+                                <button class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {!! Form::close() !!}
+            </div>
         </div>
     </div>
 </div>

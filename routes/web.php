@@ -26,12 +26,15 @@ Route::get('/admin', 'AdminController@index')->name('admin.dashboard');
 Route::get('/admin/userProfile', 'AdminController@userProfile')->name('admin.userProfile');
 
 Route::get('/admin/categories', 'AdminController@categories')->name('admin.categories');
+Route::Post('/admin/categories/updateStatus', 'AdminController@updateCategoryStatus');
 Route::Post('admin/categories/createCategories', 'AdminController@createCategories')->name('admin.createCategories');
 Route::get('/admin/categories/getCategories', 'AdminController@getCategories')->name('categories.getCategories');
 
 Route::get('/admin/menus', 'AdminController@menus')->name('admin.menus');
+Route::Post('/admin/menus/updateProductStatus', 'AdminController@updateProductStatus');
 Route::get('/admin/menus/getMenus', 'AdminController@getMenus')->name('menus.getMenus');
 Route::Post('admin/menus/createProduct', 'AdminController@createProduct')->name('admin.createProduct');
+Route::Post('admin/menus/editProduct', 'AdminController@editProduct')->name('admin.editProduct');
 Route::Post('admin/menus/createBundle', 'AdminController@createBundle')->name('admin.createBundle');
 Route::get('/admin/getCategoriesDropdown/{categorySearch}', 'AdminController@getCategoriesDropdown');
 Route::get('/admin/getBundleForSpecificCategory/{bundleCategorySearch}', 'AdminController@getBundleForSpecificCategory');
@@ -39,8 +42,13 @@ Route::get('/admin/getProductsDropdown/{productSearch}', 'AdminController@getPro
 
 
 Route::get('/admin/orders', 'AdminController@orders')->name('admin.orders');
+Route::Post('admin/orders/createOrder', 'AdminController@createOrder')->name('admin.createOrder');
 Route::get('/admin/orders/getManageOrders', 'AdminController@getManageOrders')->name('orders.getManageOrders');
 Route::Get('/admin/orders/getMenusToCarousel/{category}', 'AdminController@getMenusToCarousel');
+Route::Post('admin/customerWillPay/{transaction_id}', 'AdminController@customerWillPay');
+
+Route::Get('/admin/orders/getCategoriesInOrders', 'AdminController@getCategoriesInOrders');
+Route::Get('/admin/orders/getTablesInOrders', 'AdminController@getTablesInOrders');
 // Route::get('admin/orders/getMenusToCarousel', 'AdminController@getMenusToCarousel')->name('orders.getMenusToCarousel');
 
 Route::get('/admin/tables', 'AdminController@tables')->name('admin.tables');

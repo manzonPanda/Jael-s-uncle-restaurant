@@ -14,10 +14,11 @@ class CreateProductTransactionTable extends Migration
     public function up()
     {
         Schema::create('prod_transact', function (Blueprint $table) {
-            $table->integer('product_id');
             $table->integer('transaction_id');
+            $table->integer('product_id');
+            $table->integer('category_id');
             $table->integer('quantity');
-            $table->string('category');
+            $table->decimal('price',7,2);
             $table->timestamps();
             
             $table->foreign('product_id')->references('product_id')->on('products');
