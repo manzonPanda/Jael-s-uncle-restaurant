@@ -91,12 +91,13 @@ class="active"
                             {{-- <i class="material-icons">store</i> --}}
                             <i class="fa fa-users fa-4x" aria-hidden="true"></i>
                         </div>
-                        <p class="card-category">Today's Costumer</p>
-                        <h3 class="card-title">15</h3>
+                        <p class="card-category">Today's Order</p>
+                        <h3 class="card-title">{{$todayOrders}}</h3>
                         </div>
                         <div class="card-footer">
                         <div class="stats">
-                            Last 4 Hours
+                            {{-- Last 4 Hours --}}
+                            View
                         </div>
                         </div>
                     </div>
@@ -108,11 +109,11 @@ class="active"
                             <i class="fa fa-list fa-4x" aria-hidden="true"></i>
                         </div>
                         <p class="card-category">Menus</p>
-                        <h3 class="card-title">75</h3>
+                        <h3 class="card-title">0</h3>
                         </div>
                         <div class="card-footer">
                         <div class="stats">
-                            <i class="material-icons">local_offer</i> Add | Create | Edit
+                            <i class="material-icons"></i> Add | Create | Edit
                         </div>
                         </div>
                     </div>
@@ -124,7 +125,8 @@ class="active"
                                 <i class="fa fa-credit-card fa-4x" aria-hidden="true"></i>
                         </div>
                         <p class="card-category">Today's Sale</p>
-                        <h3 class="card-title">Php 5000</h3>
+                        <h3 class="card-title">Php {{$todaySales}} </h3>
+                        {{-- <h3 class="card-title">{{\Carbon\Carbon::now()->toDateTimeString()}} </h3> --}}
                         </div>
                         <div class="card-footer">
                         <div class="stats">

@@ -35,7 +35,6 @@ ng-app="ourAngularJsApp"
 
             displayCategoriesButtons();
             displayTableChoices();
-
             $("#payModalContinueButton").on('click', function(button) {
                 button.preventDefault(); //prevent the page to load when submitting form
                 var transaction_id = button.currentTarget.getAttribute("data-transaction_id");
@@ -95,7 +94,7 @@ ng-app="ourAngularJsApp"
                     },
 
                     error:function(data){
-                        alert( JSON.stringify(data.responseJSON.errors))
+                        console.log("error: " +JSON.stringify(data.responseJSON.errors))
                     }
 
                 });
@@ -104,7 +103,64 @@ ng-app="ourAngularJsApp"
 
 
         });
-                               
+
+        function insertDataInViewOrderModal(button){
+            var receiptNumber = button.parentNode.parentNode.parentNode.firstChild.innerHTML;
+            $.ajax({
+                    method:'GET',
+                    url: 'viewReceiptOrder/' + receiptNumber,
+                    dataType:"json",
+                    success: function(data){
+                        console.log(data)
+                        var thatTbody = document.getElementById("orderDetails");
+                        $("#orderDetails tr").remove();                        
+                        for(var i = 0; i<data.length; i++){
+                            var lastRow = thatTbody.rows[thatTbody.rows.length-1]; //get last row of the table
+                            if(data[i].categoryPrice > 0){ //if it is bundle
+                                if ( i>0 && data[i-1].categoryPrice > 0 ){
+                                    lastRow.firstChild.innerHTML += "<br>"+data[i].quantity+" "+data[i].name;
+
+                                    // var secondRow = thatTbody.insertRow(-1);
+                                    //     secondRow.setAttribute("style","text-align:center")
+                                    //     var cell = secondRow.insertCell(-1);
+                                    //         cell.insertAdjacentHTML('afterbegin',"<td colspan=\"2\">" +data[i].quantity+" "+data[i].name+ "</td>");      
+                                    //         cell.colSpan = 2;
+
+                                }else{
+                                    var newRow = thatTbody.insertRow(-1);
+                                        newRow.insertCell(-1).innerHTML = "<td>" +data[i].categoryName+ "</td>";
+                                        newRow.insertCell(-1).innerHTML = "<td>" +data[i].quantity+ "</td>";
+                                    var secondRow = thatTbody.insertRow(-1);
+                                        secondRow.setAttribute("style","text-align:center")
+                                        var cell = secondRow.insertCell(-1);
+                                            cell.insertAdjacentHTML('afterbegin',"<td colspan=\"2\">" +data[i].quantity+" "+data[i].name+ "</td>");
+                                            cell.colSpan = 2;
+                                }
+
+                            }else{
+                                var newRow = thatTbody.insertRow(-1);
+                                newRow.insertCell(-1).innerHTML = "<td colspan=\"2\" style='text-align:right'>" +data[i].name+ "</td>";
+                                newRow.insertCell(-1).innerHTML = "<td >" +data[i].quantity+ "</td>";
+                            }
+                        }
+                        
+                    }
+            });
+        }
+
+        function editOrder(button){
+            var receiptNumber = button.parentNode.parentNode.parentNode.firstChild.innerHTML;
+            
+            $.ajax({
+                    method:'GET',
+                    url: 'editReceipt/' + receiptNumber,
+                    dataType:"json",
+                    success: function(data){
+                        console.log(data)
+                    }
+            });
+
+        }       
         function insertTransactionIdInButton(button){
                 document.getElementById("payModalContinueButton").setAttribute("data-transaction_id",button.getAttribute("data-transaction_id"))
             }
@@ -177,7 +233,7 @@ ng-app="ourAngularJsApp"
         }
 		function createCarouselInRow(data,currentDiv,index,isBundle){
 			var newColSm3Div = document.createElement("div");
-				newColSm3Div.setAttribute("class","col-sm-3");
+				newColSm3Div.setAttribute("class","col-4 col-sm-4");
             var newCardBgDark = document.createElement("div");
                 newCardBgDark.setAttribute("class","card bg-dark");
 			var newImage = document.createElement("img");
@@ -241,9 +297,9 @@ ng-app="ourAngularJsApp"
 
             var newButton = document.createElement("button");
                 if(isBundle){//it is bundle
-                    setMultipleAttributes(newButton,{"style":"background-color:#26d926;color:white;border-radius:15%;border-color:white","class":"btn bt-success","onclick":"addItemToCart(this)","data-category_id":data[index].categoryId});
+                    setMultipleAttributes(newButton,{"style":"background-color:#26d926;color:white;border-radius:15%;border-color:white","class":"btn bt-success btn-block","onclick":"addItemToCart(this)","data-category_id":data[index].categoryId});
                 }else{
-                    setMultipleAttributes(newButton,{"style":"background-color:#26d926;color:white;border-radius:15%;border-color:white","class":"btn bt-success","onclick":"addItemToCart(this)","data-product_id":data[index].product_id,"data-product_category_id":data[index].categoryId});
+                    setMultipleAttributes(newButton,{"style":"background-color:#26d926;color:white;border-radius:15%;border-color:white","class":"btn bt-success btn-block","onclick":"addItemToCart(this)","data-product_id":data[index].product_id,"data-product_category_id":data[index].categoryId});
                 }
                 // ng-click="addButton($event)"
                     //    angular.element(document.getElementById("angularScope")).scope().addButton(data,currentDiv,i);
@@ -311,7 +367,7 @@ ng-app="ourAngularJsApp"
                 success:function(data){
                     console.log(data)
                     var currentDiv = 1;
-                    var numberOfMenuPerCarousel = 4;
+                    var numberOfMenuPerCarousel = 3;
                     //create nth li(indicator) and nth DV1
                     createCarousel(currentDiv);
                     for (var i = 0; i < data.length; i++) {
@@ -458,9 +514,9 @@ ng-app="ourAngularJsApp"
             </div>
 
         <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="col-lg-6 col-md-6 col-sm-6 ">
                     <div class="card">
-                            <div class="card-header" style="background-color:slategrey;color:white">Drinks</div>
+                            <div class="card-header" style="background-color:slategrey;color:white">Category</div>
                     </div>
                     {{-- Carousel by 4 images Example--}}
                     {{-- <div class="row" >
@@ -640,7 +696,7 @@ ng-app="ourAngularJsApp"
                 </div>
 
            
-                <div class="col-lg-6 col-md-6 col-sm-6" >
+                <div class="col-lg-6 col-md-6  col-sm-6 " >
                     <div class="card">
                             <div class="card-header" style="background-color:slategrey;color:white">Customer Order</div>
                     </div>
@@ -662,7 +718,9 @@ ng-app="ourAngularJsApp"
                                 </div>
                                 <div class="col-md-4" margin >
                                     {{Form::label('Date', 'Date:')}}
-                                    <input type="date" name="Date" id="today" class="form-control"/>    
+                                    {{-- <input type="date" name="Date" id="today" class="form-control"/>     --}}
+                                    {{-- {{\Carbon\Carbon::createFromFormat('d/m/y','25/08/2017')}} --}}
+                                    <input type="date" name="Date" id="today" value="" class="form-control"/>    
                                 </div>
                             </div>        
                             <br>
@@ -759,7 +817,7 @@ ng-app="ourAngularJsApp"
                         <table class="table table-bordered table-striped" style="width:100%" id="manageOrdersDataTable">
                             <thead>
                                 <tr>
-                                    <th class="text-left">Reciept #</th>
+                                    <th class="text-left">Receipt #</th>
                                     <th class="text-left">Table #</th>
                                     <th class="text-left">Cutomer Name</th>
                                     {{-- <th class="text-left">Total Products</th> --}}
@@ -1108,6 +1166,38 @@ ng-app="ourAngularJsApp"
                     <div class="form-group clearfix">
                         <button id="payModalContinueButton" type="button" class="btn btn-success">Continue</button>
                         <button class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="viewOrderModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="viewLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <p></p>
+                <h3> <i class="fa fa-exclamation-triangle" style="margin-right: 15px"> </i> Order details </h3>
+                <button class="close" data-dismiss="modal">&times;</button>
+            </div>
+ 
+            <div class="modal-body">
+                    <div class="content table-responsive">
+                        <table class="table table-bordered table-striped ">
+                            <thead>
+                                <tr>
+                                    <th class="text-left">Product</th>
+                                    <th class="text-left">Qty</th>
+                                </tr>
+                            </thead>
+                            <tbody id="orderDetails">
+
+                            </tbody>
+                        </table>
+                    </div>
+                <div class="text-center">
+                    <div class="form-group clearfix">
+                        <button class="btn btn-danger" data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>

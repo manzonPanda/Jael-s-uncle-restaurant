@@ -14,7 +14,8 @@ class CreateTransactionsTable extends Migration
     public function up()
     {
         Schema::create('transactions', function (Blueprint $table) {
-            $table->integer('transaction_id')->unique();
+            // $table->integer('transaction_id')->unique();
+            $table->integer('transaction_id');
             $table->integer('tableId')->nullable();
             $table->string('customer_name',45)->nullable();
             // $table->integer('customer_id'); do this in the future Jake!:)

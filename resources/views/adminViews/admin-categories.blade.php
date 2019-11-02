@@ -60,6 +60,29 @@ class="active"
                 });
             });
 
+            $('#formEditCategory').on('submit',function(e){
+              e.preventDefault();
+              var data = $(this).serialize();
+
+                $.ajax({
+                    type:'POST',
+                    url: "{{route('admin.editCategory')}}",
+                    data: data,
+
+                    success:function(data){
+                        $('#editCategoryModal').modal('hide')   //close modal
+                        document.getElementById("formEditCategory").reset(); //reset the form
+                        $("#categoriesDataTable").DataTable().ajax.reload();//reload the dataTables
+                    },
+
+                    error:function(data){
+                        console.log("error!")
+                    }
+
+                });
+
+            });
+
          });
          function insertDataToEditCategoryModal(button){
             var data  = $(button.parentNode.parentNode.parentNode.innerHTML).slice(0,-1);
@@ -67,7 +90,6 @@ class="active"
             document.getElementById("categoryName").value = data[0].innerHTML;
             document.getElementById("categoryId").value = button.parentNode.parentNode.lastChild.id;
 
-            // $("#errorDivEditItem").html("");
         }
         function formUpdateCategoryStatus(categoryStatus,categoryId){
             //0 == INACTIVE && 1 == ACTIVE

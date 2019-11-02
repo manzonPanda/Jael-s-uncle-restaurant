@@ -14,16 +14,16 @@ class="active"
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12">
                 <div class="card">
-                    <div class="card-header" style="background-color:red;font-color:white">!UNDER CONSTRUCTION!</div>
+                    <div class="card-header" style="background-color:red;color:white">COMING SOON</div>
 
-                    <div class="card-body">
+                    <div class="card-body" style="height:700px;background-image: url(/assets/img/underConstruction.jpg)">
                         @if (session('status'))
                             <div class="alert alert-success" role="alert">
                                 {{ session('status') }}
                             </div>
                         @endif
 
-                        You are in a Reports Page!
+
                     </div>
                 </div>
             </div>

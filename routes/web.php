@@ -28,6 +28,7 @@ Route::get('/admin/userProfile', 'AdminController@userProfile')->name('admin.use
 Route::get('/admin/categories', 'AdminController@categories')->name('admin.categories');
 Route::Post('/admin/categories/updateStatus', 'AdminController@updateCategoryStatus');
 Route::Post('admin/categories/createCategories', 'AdminController@createCategories')->name('admin.createCategories');
+Route::Post('admin/categories/editCategory', 'AdminController@editCategory')->name('admin.editCategory');
 Route::get('/admin/categories/getCategories', 'AdminController@getCategories')->name('categories.getCategories');
 
 Route::get('/admin/menus', 'AdminController@menus')->name('admin.menus');
@@ -45,6 +46,8 @@ Route::get('/admin/orders', 'AdminController@orders')->name('admin.orders');
 Route::Post('admin/orders/createOrder', 'AdminController@createOrder')->name('admin.createOrder');
 Route::get('/admin/orders/getManageOrders', 'AdminController@getManageOrders')->name('orders.getManageOrders');
 Route::Get('/admin/orders/getMenusToCarousel/{category}', 'AdminController@getMenusToCarousel');
+Route::Get('admin/editReceipt/{transaction_id}', 'AdminController@editReceipt');    
+Route::Get('admin/viewReceiptOrder/{transaction_id}', 'AdminController@viewReceiptOrder');    
 Route::Post('admin/customerWillPay/{transaction_id}', 'AdminController@customerWillPay');
 
 Route::Get('/admin/orders/getCategoriesInOrders', 'AdminController@getCategoriesInOrders');

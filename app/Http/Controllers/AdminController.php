@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use DB;
 use Datatables;
 use App\Product;
+use Carbon\Carbon; //extends PHP's own DateTime class
 
 class AdminController extends Controller
 {
@@ -30,7 +31,30 @@ class AdminController extends Controller
      */
     public function index()
     {
-        return view('adminViews.admin-dashboard');
+        $today = Carbon::today();
+        $currentDate = Carbon::now();
+        $getTodaySales = DB::table('transactions')
+        ->select('totalPrice','created_at')
+        ->where('created_at','>',$today)
+        ->where('status','=','PAID')
+        ->sum('transactions.totalPrice')
+        ;
+        
+        $getTodayOrders= DB::table('transactions')
+        ->select('created_at')
+        ->where('created_at','>',$today)
+        ->where('status','=','PAID')
+        ->count('created_at')
+        ;
+        
+        return view('adminViews.admin-dashboard',['todaySales'=>$getTodaySales,'todayOrders'=>$getTodayOrders]);
+        // return view("adminViews.admin-dashboard")->with('todayOrders',$getTodayOrders);
+        // return view("adminViews.admin-dashboard")->with('todaySales',$getTodaySales);
+
+
+        //Time
+        // $current = Carbon::now();
+        // return view('adminViews.admin-dashboard')->with('current',$current);
     }
 
     public function userProfile()
@@ -85,6 +109,15 @@ class AdminController extends Controller
         );
 
         return "successful";
+    }
+
+    public function editCategory(Request $request){
+
+        DB::table('categories')
+        ->where( 'category_id',$request->categoryId)
+        ->update( ['categoryName'=>$request->categoryName] );
+
+    
     }
 
     public function menus()
@@ -300,6 +333,8 @@ class AdminController extends Controller
             'tableId' => 'required',
         ]);
 
+        $currentDate = Carbon::now();
+
         if( $request->categoryIds ){
             $countBundle = count($request->categoryIds);
         }
@@ -315,7 +350,7 @@ class AdminController extends Controller
             
             if($data->isEmpty()){
                 $insert = DB::table('transactions')->insert(
-                    ['transaction_id' => $request->receiptNumber, 'tableId' => $request->tableId, 'customer_name' => $request->customerName, 'status' => 'PENDING','created_at' => $request->Date,'totalPrice' =>$request->totalPrice]
+                    ['transaction_id' => $request->receiptNumber, 'tableId' => $request->tableId, 'customer_name' => $request->customerName, 'status' => 'PENDING','created_at' => $currentDate,'totalPrice' =>$request->totalPrice]
                 );
 
                 //for bundles
@@ -327,7 +362,7 @@ class AdminController extends Controller
                         ->get();
                         for( $j = 0; $j < count($productsOfBundle); $j++ ){ //insert all products of bundle in table
                             $insert = DB::table('prod_transact')->insert(
-                                ['transaction_id' => $request->receiptNumber, 'product_id' => $productsOfBundle[$j]->product_id, 'category_id' => $request->categoryIds[$i], 'quantity' => $productsOfBundle[$j]->quantity,'price' => $request->categoryPrice[$i],'created_at' => $request->Date]);
+                                ['transaction_id' => $request->receiptNumber, 'product_id' => $productsOfBundle[$j]->product_id, 'category_id' => $request->categoryIds[$i], 'quantity' => $productsOfBundle[$j]->quantity,'price' => $request->categoryPrice[$i],'created_at' => $currentDate]);
                             }
                             
                         }
@@ -337,7 +372,7 @@ class AdminController extends Controller
                     //for products
                     for($i = 0; $i<$countProducts; $i++){
                         $insert = DB::table('prod_transact')->insert(
-                            ['transaction_id' => $request->receiptNumber, 'product_id' => $request->productIds[$i],'category_id' => $request->productCategoryIds[$i],'quantity' => $request->quantity[$i],'price' => $request->productPrice[$i],'created_at' => $request->Date]);
+                            ['transaction_id' => $request->receiptNumber, 'product_id' => $request->productIds[$i],'category_id' => $request->productCategoryIds[$i],'quantity' => $request->quantity[$i],'price' => $request->productPrice[$i],'created_at' => $currentDate]);
 
                     }
                 }
@@ -356,8 +391,42 @@ class AdminController extends Controller
     //     return $data;
     // }
 
+    public function editReceipt($transactionId){
+        $data = DB::table('prod_transact')
+        ->join('categories','prod_transact.category_id','=','categories.category_id')
+        ->join('products','prod_transact.product_id','=','products.product_id')
+        ->select('prod_transact.transaction_id','prod_transact.category_id as categoryId','categories.categoryName','categories.price as categoryPrice','products.name','prod_transact.price','prod_transact.quantity','products.product_id')
+        // ->where('prod_transact.transaction_id',"=",$transactionId)
+        ->groupBy('categoryId','price')
+        ->having('prod_transact.transaction_id',"=",$transactionId)
+        ->get();
+        // ->toSql();
+
+        return $data;        
+    
+    }
+
+    public function viewReceiptOrder($transactionId){
+        $data = DB::table('prod_transact')
+        ->join('categories','prod_transact.category_id','=','categories.category_id')
+        ->join('products','prod_transact.product_id','=','products.product_id')
+        ->select('prod_transact.transaction_id','prod_transact.category_id as categoryId','categories.categoryName','categories.price as categoryPrice','products.name','prod_transact.price','prod_transact.quantity','products.product_id')
+        // ->where('prod_transact.transaction_id',"=",$transactionId)
+        // ->groupBy('categoryId')
+        ->having('prod_transact.transaction_id',"=",$transactionId)
+        ->get();
+        // ->toSql();
+
+        return $data;        
+    
+    }
     public function customerWillPay($transactionId){
-        return "continue to update transaction table query";
+
+        $data = DB::table('transactions')
+        // ->select('transaction_id','tableId','customer_name','created_at','status','totalPrice')
+        ->where('transaction_id',$transactionId)
+        ->update(['status' => 'PAID']);
+        return "payment successful";
     }
     public function getManageOrders()
     {
@@ -371,7 +440,7 @@ class AdminController extends Controller
                     <button onclick='editOrder(this)'class='btn btn-info' ><i class='glyphicon glyphicon-th-list'></i>Edit</button>
                 </a>
                 <a href = '#viewOrderModal' data-toggle='modal' >
-                    <button onclick='viewOrderModal(this)'class='btn btn-info' ><i class='glyphicon glyphicon-th-eye'></i>View</button>
+                    <button onclick='insertDataInViewOrderModal(this)'class='btn btn-info' ><i class='glyphicon glyphicon-th-eye'></i>View</button>
                 </a>
                 <a href = '#payModal' data-toggle='modal' >
                     <button data-transaction_id='$data->transaction_id'class='btn btn-success' onclick='insertTransactionIdInButton(this)' ><i class='glyphicon glyphicon-th-list'></i>Pay</button>

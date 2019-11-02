@@ -422,7 +422,7 @@
                                     <script>
                                         document.write(new Date().getFullYear())
                                     </script>
-                                    <a href="#">Jake James Manzon</a>, made with love and passion:)
+                                    <a href="#">Jake James Manzon</a>, made with love and passion:). v1.0
                                 </p>
                             </nav>
                         </div>
