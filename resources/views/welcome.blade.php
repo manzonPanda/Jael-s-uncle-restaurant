@@ -98,10 +98,13 @@
                     @auth
                         <a href="{{ url('/home') }}">Continue as {{ Auth::user()->name }}</a>
                     @else
-                        <a href="{{ route('login') }}">Login</a>
+                        {{-- <a href="{{ route('login') }}">Login</a> --}}
+                            <a class="txt1" href="{{route('admin.login')}}">
+                                Admin Login
+                            </a>
 
                         @if (Route::has('register'))
-                            <a href="{{ route('register') }}">Register</a>
+                            {{-- <a href="{{ route('register') }}">Register</a> --}}
                         @endif
                     @endauth
                 </div>
@@ -109,9 +112,9 @@
 
             {{-- <div class="content"> --}}
             <div class="wrap-login100">
-                <div class="title m-b-md">
-                    Jael's Awesome Project
-                </div>
+                <span style="font-size:60px;color:springgreen">
+                    Alfredo's Restaurant Project
+                </span>
 
                 {{-- <div class="links">
                     <a href="https://laravel.com/docs">Docs</a>

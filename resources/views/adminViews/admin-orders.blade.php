@@ -149,16 +149,23 @@ ng-app="ourAngularJsApp"
         }
 
         function editOrder(button){
-            var receiptNumber = button.parentNode.parentNode.parentNode.firstChild.innerHTML;
-            
-            $.ajax({
-                    method:'GET',
-                    url: 'editReceipt/' + receiptNumber,
-                    dataType:"json",
-                    success: function(data){
-                        console.log(data)
-                    }
-            });
+
+            // $('html,body')animate({
+            //     scrollTop: $("#customerOrderDiv").offset().top},"slow"
+            // );
+
+            document.getElementById("customerOrderDiv").scrollIntoView();
+
+            // var receiptNumber = button.parentNode.parentNode.parentNode.firstChild.innerHTML;
+
+            // $.ajax({
+            //         method:'GET',
+            //         url: 'editReceipt/' + receiptNumber,
+            //         dataType:"json",
+            //         success: function(data){
+            //             console.log(data)
+            //         }
+            // });
 
         }       
         function insertTransactionIdInButton(button){
@@ -698,7 +705,7 @@ ng-app="ourAngularJsApp"
            
                 <div class="col-lg-6 col-md-6  col-sm-6 " >
                     <div class="card">
-                            <div class="card-header" style="background-color:slategrey;color:white">Customer Order</div>
+                            <div class="card-header" id="customerOrderDiv" style="background-color:slategrey;color:white">Customer Order</div>
                     </div>
                     <div >
                             {!! Form::open(['method'=>'post','id'=>'formSales']) !!}                                
