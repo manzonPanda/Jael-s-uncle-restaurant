@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script type="text/javascript">
+        // var text = select * from `prod_transact` inner join `products` on `prod_transact`.`product_id` = `products`.`product_id` inner join `transactions` on `prod_transact`.`transaction_id` = `transactions`.`transaction_id` WHERE transactions.created_at = "2019-11-22";
+        var temp = 'hi `ja `" ke';
+        console.log( temp.replace(/`+/g,"-") ) 
+        // (/\s+/g, '-')
+        function convertMe(button){
+            var tempArea = button.previousSibling.previousSibling.value;
+            document.getElementById("result").innerHTML = tempArea.replace( /["'`]/g,"" );
+        }
+    </script>
+    <div>
+        <textarea id="textArea" cols="90" rows="10"></textarea>
+        <button onclick="convertMe(this)">Convert me</button>
+    </div>
+    <br><br><br><br><br>
+
+    <div>
+        <h4 id="result"></h4>
+    </div>
+</body>
+</html>

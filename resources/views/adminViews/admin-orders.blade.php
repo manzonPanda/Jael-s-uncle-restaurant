@@ -21,6 +21,40 @@ ng-app="ourAngularJsApp"
     <script src="{{asset('assets/js/angularJs.js')}}"></script>
     <script src="{{asset('assets/js/angular-datatables.min.js')}}"></script> 
 
+    <style>
+            .autocomplete {
+                /*the container must be positioned relative:*/
+                position: relative;
+                display: inline-block;
+            }
+            .searchResultDiv {
+                position: absolute;
+                border: 1px solid #d4d4d4;
+                border-bottom: none;
+                border-top: none;
+                z-index: 99;
+                /*position the autocomplete items to be the same width as the container:*/
+                top: 100%;
+                left: 0;
+                right: 0;
+            }
+            .searchResultDiv div {
+                padding: 10px;
+                cursor: pointer;
+                background-color: #fff; 
+                border-bottom: 1px solid #d4d4d4; 
+            }
+            .searchResultDiv div:hover {
+                /*when hovering an item:*/
+                background-color: #e9e9e9; 
+            }
+            .autocomplete-active {
+                /*when navigating through the items using the arrow keys:*/
+                background-color: DodgerBlue !important; 
+                color: #ffffff; 
+            }
+            </style>
+
     <script type="text/javascript">
         $(document).ready(function(){
 
@@ -45,7 +79,7 @@ ng-app="ourAngularJsApp"
                         console.log(data)
                         $('#payModal').modal('hide');
                        $("#manageOrdersDataTable").DataTable().ajax.reload();//reload the dataTables                                              
-                    }
+                    } 
                 })
 
           })
@@ -65,6 +99,7 @@ ng-app="ourAngularJsApp"
                  {data: 'customer_name'},
                  {data: 'created_at'},
                  {data: 'status'},
+                 {data: 'totalPrice'},
                  {data: 'totalPrice'},
                  {data: 'action'},
              ]
@@ -453,6 +488,61 @@ ng-app="ourAngularJsApp"
                 }
             });
         }
+
+        function searchItem(a){
+          if(a.value === ""){
+              document.getElementById("searchItemResultDiv").innerHTML ="";   
+          }
+
+          document.getElementById("carouselExampleIndicators").childNodes[1].innerHTML = "";
+          document.getElementById("carouselExampleIndicators").childNodes[3].innerHTML = "";
+        //   var fullRoute = "/admin/orders/getMenusToCarousel/"+button;
+          $.ajax({
+                type:'GET',
+                // url:fullRoute,
+                url: 'getMenusToCarouselBySearch/' + a.value,
+                dataType:'json',
+                // data: {
+                //     'category':button.innerHTML
+                // },
+                success:function(data){
+                    console.log(data)
+                    var currentDiv = 1;
+                    var numberOfMenuPerCarousel = 3;
+                    //create nth li(indicator) and nth DV1
+                    createCarousel(currentDiv);
+                    for (var i = 0; i < data.length; i++) {
+                        if( numberOfMenuPerCarousel / i > 1){
+                            //insert index(i) to the current DIV
+                            //if next data has a CategoryPrice, meaning it is part of a bundle, then add data(info) to card-body
+                            if( data[i].categoryPrice > 0 ){
+                                var isBundle = true;
+                            }else{
+                                var isBundle = false;
+                            }
+                           createCarouselInRow(data,currentDiv,i,isBundle);
+
+                           //call function in AngularJs
+                        //    angular.element(document.getElementById("angularScope")).scope().createCarouselInRow(data,currentDiv,i);
+                        }else{
+                            //add another DIV and insert index(i)
+							currentDiv++;
+							numberOfMenuPerCarousel += 4;
+							//create nth li(indicator) and nth DV1
+							createCarousel(currentDiv);
+							//then insert index(i) to the current DIV
+							createCarouselInRow(data,currentDiv,i);
+                        } 
+                        
+                    }
+
+                },
+                error:function(data){
+                
+                }
+            });
+
+      }
    </script>
 
 @endsection
@@ -523,7 +613,18 @@ ng-app="ourAngularJsApp"
         <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-6 ">
                     <div class="card">
-                            <div class="card-header" style="background-color:slategrey;color:white">Category</div>
+                        <div class="row" style="background-color:slategrey">
+                                <div class="col-lg-6 col-md-6 col-sm-6 col">
+                                        <div class="card-header" style="background-color:slategrey;color:white">Menus</div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6 col">
+                                        <div class="autocomplete" style="width:100%;">
+                                            <input autocomplete="off" type="text" id="searchItemInput" onkeyup="searchItem(this)" class="form-control border-input" placeholder="Enter menu ">
+                                            <div id="searchItemResultDiv" class="searchResultDiv">
+                                            </div>
+                                        </div>
+                                </div>
+                        </div>
                     </div>
                     {{-- Carousel by 4 images Example--}}
                     {{-- <div class="row" >
@@ -831,6 +932,7 @@ ng-app="ourAngularJsApp"
                                     <th class="text-left">Date & Time</th>
                                     <th class="text-left">Payment Status</th>
                                     <th class="text-left">Total Price</th>
+                                    <th class="text-left">Waiting time</th>
                                     <th class="text-left">Action</th>
                                 </tr>
                             </thead>

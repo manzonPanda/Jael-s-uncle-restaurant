@@ -25,6 +25,10 @@ Route::post('admin/login','Auth\AdminLoginController@login')->name('admin.login.
 Route::get('/admin', 'AdminController@index')->name('admin.dashboard');
 Route::get('/admin/userProfile', 'AdminController@userProfile')->name('admin.userProfile');
 
+Route::get('/admin/getSummaryBreakdownTable', 'AdminController@getSummaryBreakdownTable')->name('dashboard.getSummaryBreakdownTable');
+Route::Get('/admin/viewSummaryBreakdown/{dateSelected}', 'AdminController@viewSummaryBreakdown');    
+
+
 Route::get('/admin/categories', 'AdminController@categories')->name('admin.categories');
 Route::Post('/admin/categories/updateStatus', 'AdminController@updateCategoryStatus');
 Route::Post('admin/categories/createCategories', 'AdminController@createCategories')->name('admin.createCategories');
@@ -53,6 +57,7 @@ Route::Post('admin/customerWillPay/{transaction_id}', 'AdminController@customerW
 Route::Get('/admin/orders/getCategoriesInOrders', 'AdminController@getCategoriesInOrders');
 Route::Get('/admin/orders/getTablesInOrders', 'AdminController@getTablesInOrders');
 // Route::get('admin/orders/getMenusToCarousel', 'AdminController@getMenusToCarousel')->name('orders.getMenusToCarousel');
+Route::get('/admin/getMenusToCarouselBySearch/{productSearch}', 'AdminController@getMenusToCarouselBySearch');
 
 Route::get('/admin/tables', 'AdminController@tables')->name('admin.tables');
 Route::Post('admin/menus/createTable', 'AdminController@createTable')->name('admin.createTable');
